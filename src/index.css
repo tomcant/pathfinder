@@ -1,0 +1,35 @@
+@import url("https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css");
+
+body {
+  max-width: none;
+}
+
+.Grid {
+  display: flex;
+  margin-bottom: 2rem;
+}
+
+.Grid-cells {
+  display: grid;
+  grid-template: repeat(20, 30px) / repeat(30, 1fr);
+  background-color: var(--nc-bg-2);
+  border: 3px solid var(--nc-bg-3);
+}
+
+.Grid-cell {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  border: 1px solid var(--nc-bg-3);
+}
+
+.Grid-cell.start {
+  background-color: var(--nc-bg-3);
+}
+.Grid-cell.target {
+  background-color: var(--nc-bg-3);
+}
+.Grid-cell.wall {
+  background-color: var(--nc-bg-3);
+}
