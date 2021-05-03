@@ -1,40 +1,27 @@
+import SearchMap from "./SearchMap";
 import Queue from "./utils/queue";
 import Vec2d from "./utils/vec2d";
 
-enum Cell {
-  Empty = 0,
-  Start = 1,
-  Target = 2,
-  Wall = 3,
-}
-
-type Map = {
-  cells: Cell[];
-  width: number;
-  height: number;
-};
-
-type SearchParams = {
-  map: Map;
-  startPos: Vec2d;
-  targetPos: Vec2d;
+export type SearchParams = {
+  map: SearchMap;
+  start: Vec2d;
+  target: Vec2d;
 };
 
 type SearchNode = {
   pos: Vec2d;
-  // prev: SearchNode ??
+  prev?: SearchNode;
 };
 
 type SearchState = {
   node: SearchNode;
-  seen: Set<string>;
+  visited: Set<string>;
+  foundTarget: boolean;
 };
 
-export const breadthFirstSearch = function* (
-  params: SearchParams
-): Generator<SearchState> {
-  const seen = new Set<string>([hashPos(params.startPos)]);
-  const queue = new Queue<SearchNode>([{ pos: params.startPos }]);
+export const breadthFirstSearch = function* (params: SearchParams): Generator<SearchState> {
+  const visited = new Set<string>([params.start.toString()]);
+  const queue = new Queue<SearchNode>([{ pos: params.start }]);
 
   while (!queue.isEmpty()) {
     const node = queue.dequeue();
@@ -43,41 +30,18 @@ export const breadthFirstSearch = function* (
       break;
     }
 
-    yield { node, seen };
+    yield { node, visited, foundTarget: node.pos.equals(params.target) };
 
-    for (const neighbourPos of getNeighbours(node.pos, params.map)) {
-      const hash = hashPos(neighbourPos);
+    for (const neighbourPos of params.map.getNeighbours(node.pos)) {
+      const hash = neighbourPos.toString();
 
-      if (!seen.has(hash)) {
-        seen.add(hash);
-        queue.enqueue({ pos: neighbourPos });
+      if (!visited.has(hash)) {
+        visited.add(hash);
+        queue.enqueue({
+          pos: neighbourPos,
+          prev: node,
+        });
       }
     }
   }
 };
-
-const getNeighbours = (pos: Vec2d, map: Map): Vec2d[] => {
-  const neighbours = [];
-
-  const dirs = [
-    { dx: 1, dy: 0 },
-    { dx: 0, dy: 1 },
-    { dx: -1, dy: 0 },
-    { dx: 0, dy: -1 },
-  ];
-
-  for (const { dx, dy } of dirs) {
-    const neighbour = pos.add(new Vec2d(dx, dy));
-
-    if (!isWall(neighbour, map)) {
-      neighbours.push(neighbour);
-    }
-  }
-
-  return neighbours;
-};
-
-const isWall = (pos: Vec2d, map: Map): boolean =>
-  Cell.Wall === map.cells[pos.y * map.width + pos.x];
-
-const hashPos = (pos: Vec2d): string => pos.toString();

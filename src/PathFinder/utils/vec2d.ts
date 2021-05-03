@@ -5,6 +5,10 @@ export default class Vec2d {
     return new Vec2d(this.x + v.x, this.y + v.y);
   }
 
+  public equals(v: Vec2d): boolean {
+    return this.x === v.x && this.y === v.y;
+  }
+
   public toString(): string {
     return `(${this.x}, ${this.y})`;
   }

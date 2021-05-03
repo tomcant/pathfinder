@@ -1,41 +1,93 @@
 import { useState } from "react";
+import SearchMap, { Cell } from "../SearchMap";
+import SearchMapElem from "./SearchMap";
+import { SearchParams, breadthFirstSearch } from "../path-finder";
+import Vec2d from "../utils/vec2d";
+import sleep from "../utils/sleep";
 
-type GridProps = {
-  cells: Array<any>;
-  onCellClick: (e: any, idx: number) => void;
-};
+const getInitialSearchParams = (): SearchParams => ({
+  map: new SearchMap(30, 20),
+  start: new Vec2d(1, 1),
+  target: new Vec2d(16, 17),
+});
 
-const Grid = (props: GridProps) => {
-  return (
-    <div className="Grid">
-      <div className="Grid-cells">
-        {props.cells.map((cell, idx) => (
-          <div
-            key={idx}
-            className={`Grid-cell${cell === 1 ? " wall" : ""}`}
-            onClick={(e) => props.onCellClick(e, idx)}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
+const PathFinder = (): JSX.Element => {
+  const [searchParams, setSearchParams] = useState(getInitialSearchParams());
+  const [isDrawing, setIsDrawing] = useState(false);
 
-const GRID_WIDTH = 30;
-const GRID_HEIGHT = 20;
+  const handleMouseUpDown = (pos: Vec2d): void => {
+    setIsDrawing(!isDrawing);
+    setWall(pos);
+  };
 
-const PathFinder = () => {
-  const [cells, setCells] = useState(Array(GRID_WIDTH * GRID_HEIGHT).fill(0));
+  const handleMouseEnter = (pos: Vec2d): void => {
+    if (isDrawing) {
+      setWall(pos);
+    }
+  };
 
-  const handleCellClick = (e: any, idx: number): void => {
-    const newCells = [...cells];
-    newCells[idx] = 1 - newCells[idx];
-    setCells(newCells);
+  const setWall = (pos: Vec2d): void => {
+    searchParams.map.setCell(pos, Cell.Wall);
+    setSearchParams({ ...searchParams });
+  };
+
+  const handleStartClick = async (): Promise<void> => {
+    let targetNode;
+
+    // @ts-ignore
+    for (const searchState of breadthFirstSearch(searchParams)) {
+      searchParams.map.setCell(searchState.node.pos, Cell.Visited);
+      setSearchParams({ ...searchParams });
+
+      if (searchState.foundTarget) {
+        targetNode = searchState.node;
+        break;
+      }
+
+      await sleep(25);
+    }
+
+    if (targetNode) {
+      const path: Vec2d[] = [];
+
+      while (targetNode.prev) {
+        path.unshift(targetNode.pos);
+        targetNode = targetNode.prev;
+      }
+
+      path.unshift(searchParams.start);
+
+      for (const pos of path) {
+        searchParams.map.setCell(pos, Cell.Solution);
+        setSearchParams({ ...searchParams });
+        await sleep(50);
+      }
+    }
+  };
+
+  const handleResetClick = (): void => {
+    setSearchParams(getInitialSearchParams());
+  };
+
+  const handleGenerateClick = (): void => {
+    const searchParams = getInitialSearchParams();
+    searchParams.map.generateWalls();
+    setSearchParams(searchParams);
   };
 
   return (
     <div className="PathFinder">
-      <Grid cells={cells} onCellClick={handleCellClick} />
+      <div className="Controls">
+        <button onClick={handleStartClick}>Start</button>
+        <button onClick={handleResetClick}>Reset</button>
+        <button onClick={handleGenerateClick}>Generate walls</button>
+      </div>
+      <SearchMapElem
+        searchParams={searchParams}
+        onMouseUp={handleMouseUpDown}
+        onMouseDown={handleMouseUpDown}
+        onMouseEnter={handleMouseEnter}
+      />
     </div>
   );
 };
