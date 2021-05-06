@@ -8,29 +8,55 @@ import sleep from "../utils/sleep";
 const getInitialSearchParams = (): SearchParams => ({
   map: new SearchMap(30, 20),
   start: new Vec2d(1, 1),
-  target: new Vec2d(16, 17),
+  target: new Vec2d(28, 18),
 });
 
 const PathFinder = (): JSX.Element => {
   const [searchParams, setSearchParams] = useState(getInitialSearchParams());
   const [isDrawing, setIsDrawing] = useState(false);
+  const [isMovingStart, setIsMovingStart] = useState(false);
+  const [isMovingTarget, setIsMovingTarget] = useState(false);
 
   const setCell = (pos: Vec2d, cell: Cell): void => {
     searchParams.map.setCell(pos, cell);
     setSearchParams({ ...searchParams });
   };
 
+  const setStart = (pos: Vec2d): void => {
+    searchParams.start = pos;
+    searchParams.map.setCell(pos, Cell.Empty);
+    setSearchParams({ ...searchParams });
+  };
+
+  const setTarget = (pos: Vec2d): void => {
+    searchParams.target = pos;
+    searchParams.map.setCell(pos, Cell.Empty);
+    setSearchParams({ ...searchParams });
+  };
+
   const handleMouseUp = (pos: Vec2d): void => {
     setIsDrawing(false);
+    setIsMovingStart(false);
+    setIsMovingTarget(false);
   };
 
   const handleMouseDown = (pos: Vec2d): void => {
-    setIsDrawing(true);
-    setCell(pos, searchParams.map.isEmpty(pos) ? Cell.Wall : Cell.Empty);
+    if (pos.equals(searchParams.start)) {
+      setIsMovingStart(true);
+    } else if (pos.equals(searchParams.target)) {
+      setIsMovingTarget(true);
+    } else {
+      setIsDrawing(true);
+      setCell(pos, searchParams.map.isEmpty(pos) ? Cell.Wall : Cell.Empty);
+    }
   };
 
   const handleMouseEnter = (pos: Vec2d): void => {
-    if (isDrawing) {
+    if (isMovingStart) {
+      setStart(pos);
+    } else if (isMovingTarget) {
+      setTarget(pos);
+    } else if (isDrawing) {
       setCell(pos, Cell.Wall);
     }
   };
