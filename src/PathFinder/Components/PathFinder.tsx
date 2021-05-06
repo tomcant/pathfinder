@@ -15,19 +15,23 @@ const PathFinder = (): JSX.Element => {
   const [searchParams, setSearchParams] = useState(getInitialSearchParams());
   const [isDrawing, setIsDrawing] = useState(false);
 
-  const handleMouseUpDown = (pos: Vec2d): void => {
-    setIsDrawing(!isDrawing);
-    setWall(pos);
+  const handleMouseUp = (pos: Vec2d): void => {
+    setIsDrawing(false);
+  };
+
+  const handleMouseDown = (pos: Vec2d): void => {
+    setIsDrawing(true);
+    setCell(pos, searchParams.map.isEmpty(pos) ? Cell.Wall : Cell.Empty);
   };
 
   const handleMouseEnter = (pos: Vec2d): void => {
     if (isDrawing) {
-      setWall(pos);
+      setCell(pos, Cell.Wall);
     }
   };
 
-  const setWall = (pos: Vec2d): void => {
-    searchParams.map.setCell(pos, Cell.Wall);
+  const setCell = (pos: Vec2d, cell: Cell): void => {
+    searchParams.map.setCell(pos, cell);
     setSearchParams({ ...searchParams });
   };
 
@@ -84,8 +88,8 @@ const PathFinder = (): JSX.Element => {
       </div>
       <SearchMapElem
         searchParams={searchParams}
-        onMouseUp={handleMouseUpDown}
-        onMouseDown={handleMouseUpDown}
+        onMouseUp={handleMouseUp}
+        onMouseDown={handleMouseDown}
         onMouseEnter={handleMouseEnter}
       />
     </div>

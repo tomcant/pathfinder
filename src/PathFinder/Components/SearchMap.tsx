@@ -21,7 +21,7 @@ type SearchMapProps = {
   onMouseEnter: (pos: Vec2d) => void;
 };
 
-const SearchMapElem = (props: SearchMapProps): JSX.Element => {
+const SearchMap = (props: SearchMapProps): JSX.Element => {
   return (
     <div className="Grid">
       <div className="Grid-cells">
@@ -44,4 +44,4 @@ const SearchMapElem = (props: SearchMapProps): JSX.Element => {
   );
 };
 
-export default SearchMapElem;
+export default SearchMap;

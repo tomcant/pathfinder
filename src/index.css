@@ -29,6 +29,7 @@ body {
   cursor: pointer;
   line-height: 30px;
   text-align: center;
+  user-select: none;
   border: 1px solid var(--nc-bg-3);
 }
 
@@ -36,12 +37,6 @@ body {
   background-color: var(--nc-bg-2);
 }
 .Grid-cells > div.wall {
-  background-color: var(--nc-bg-3);
-}
-.Grid-cells > div.start {
-  background-color: var(--nc-bg-3);
-}
-.Grid-cells > div.target {
   background-color: var(--nc-bg-3);
 }
 .Grid-cells > div.solution {
