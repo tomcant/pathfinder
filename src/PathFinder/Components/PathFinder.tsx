@@ -15,6 +15,11 @@ const PathFinder = (): JSX.Element => {
   const [searchParams, setSearchParams] = useState(getInitialSearchParams());
   const [isDrawing, setIsDrawing] = useState(false);
 
+  const setCell = (pos: Vec2d, cell: Cell): void => {
+    searchParams.map.setCell(pos, cell);
+    setSearchParams({ ...searchParams });
+  };
+
   const handleMouseUp = (pos: Vec2d): void => {
     setIsDrawing(false);
   };
@@ -30,18 +35,12 @@ const PathFinder = (): JSX.Element => {
     }
   };
 
-  const setCell = (pos: Vec2d, cell: Cell): void => {
-    searchParams.map.setCell(pos, cell);
-    setSearchParams({ ...searchParams });
-  };
-
   const handleStartClick = async (): Promise<void> => {
     let targetNode;
 
     // @ts-ignore
     for (const searchState of breadthFirstSearch(searchParams)) {
-      searchParams.map.setCell(searchState.node.pos, Cell.Visited);
-      setSearchParams({ ...searchParams });
+      setCell(searchState.node.pos, Cell.Visited);
 
       if (searchState.foundTarget) {
         targetNode = searchState.node;
@@ -62,8 +61,7 @@ const PathFinder = (): JSX.Element => {
       path.unshift(searchParams.start);
 
       for (const pos of path) {
-        searchParams.map.setCell(pos, Cell.Solution);
-        setSearchParams({ ...searchParams });
+        setCell(pos, Cell.Solution);
         await sleep(50);
       }
     }
