@@ -12,33 +12,47 @@ body {
   margin-right: 0.5rem;
 }
 
-.Grid {
-  display: flex;
-}
-
-.Grid-cells {
+.Map {
   display: grid;
-  grid-template: repeat(20, 30px) / repeat(30, 1fr);
+  width: 1000px;
+  grid-template: repeat(20, 25px) / repeat(40, 25px);
   background-color: var(--nc-bg-1);
   border: 3px solid var(--nc-bg-3);
 }
 
-.Grid-cells > div {
-  width: 30px;
-  height: 30px;
+.Map > div {
+  width: 25px;
+  height: 25px;
   cursor: pointer;
-  line-height: 30px;
+  line-height: 25px;
   text-align: center;
   user-select: none;
   border: 1px solid var(--nc-bg-3);
+  box-sizing: border-box;
 }
 
-.Grid-cells > div.visited {
-  background-color: var(--nc-bg-2);
-}
-.Grid-cells > div.wall {
+.Map > div[class=""]:hover,
+.Map > div:not([class]):hover {
   background-color: var(--nc-bg-3);
 }
-.Grid-cells > div.solution {
+
+.Map > div.start:before {
+  content: "🔵";
+}
+
+.Map > div.target:before {
+  content: "⭐";
+}
+
+.Map > div.visited {
+  background-color: var(--nc-bg-2);
+}
+
+.Map > div.wall {
+  background-color: var(--nc-bg-3);
+}
+
+.Map > div.solution {
   background-color: #99c6fa;
+  border-color: #99c6fa;
 }

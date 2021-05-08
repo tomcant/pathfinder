@@ -1,4 +1,4 @@
-import PathFinder from "./PathFinder/Components/PathFinder";
+import PathFinder from "./PathFinder";
 
 const App = () => <PathFinder />;
 
