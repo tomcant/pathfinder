@@ -17,7 +17,7 @@ body {
   width: 1000px;
   grid-template: repeat(20, 25px) / repeat(40, 25px);
   background-color: var(--nc-bg-1);
-  border: 3px solid var(--nc-bg-3);
+  border: 1px solid var(--nc-bg-3);
 }
 
 .Map > div {
@@ -29,6 +29,7 @@ body {
   user-select: none;
   border: 1px solid var(--nc-bg-3);
   box-sizing: border-box;
+  transition: all 0.1s linear;
 }
 
 .Map > div[class=""]:hover,
@@ -37,11 +38,11 @@ body {
 }
 
 .Map > div.start:before {
-  content: "🔵";
+  content: "➡️";
 }
 
 .Map > div.target:before {
-  content: "⭐";
+  content: "⏺";
 }
 
 .Map > div.visited {
@@ -55,4 +56,5 @@ body {
 .Map > div.solution {
   background-color: #99c6fa;
   border-color: #99c6fa;
+  transition-duration: 0.25s;
 }
