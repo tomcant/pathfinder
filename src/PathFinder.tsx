@@ -64,11 +64,11 @@ const PathFinder = (): JSX.Element => {
   };
 
   const handleStartClick = async (): Promise<void> => {
-    for (const { current, found, visited } of methods["breadth-first-search"].start({ map, start, target })) {
+    for (const { current, found, visited } of methods["bi-directional-bfs"].start({ map, start, target })) {
       setVisited(new Set([...visited]));
 
       if (found) {
-        for (const pos of methods["breadth-first-search"].rewind(current)) {
+        for (const pos of methods["bi-directional-bfs"].rewind(current)) {
           setSolution(new Set([...solution.add(pos.toString())]));
           await sleep(20);
         }

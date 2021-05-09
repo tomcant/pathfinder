@@ -1,4 +1,4 @@
-import { SearchState, SearchNode, SearchParams, SearchMethod } from "../search";
+import { SearchState, SearchNode, SearchParams, SearchMethod, rewind as defaultRewind } from "../search";
 import Queue from "../utils/Queue";
 import Vec2d from "../utils/Vec2d";
 
@@ -11,6 +11,8 @@ type BiDirSearchNode = {
   searchNode: SearchNode;
   direction: Direction;
 };
+
+const nodeHistory: BiDirSearchNode[] = [];
 
 const start = function* ({ map, start, target }: SearchParams): Generator<SearchState> {
   const visitedForward = new Set<string>([start.toString()]);
@@ -38,35 +40,38 @@ const start = function* ({ map, start, target }: SearchParams): Generator<Search
 
     for (const neighbourPos of map.getNeighbours(searchNode.pos)) {
       const hash = neighbourPos.toString();
+      let enqueue = false;
 
-      if (direction === Direction.Forward && !visitedForward.has(hash)) {
-        visitedForward.add(hash);
-        queue.enqueue({
-          searchNode: {
-            pos: neighbourPos,
-            prev: searchNode,
-          },
-          direction,
-        });
+      if (direction === Direction.Forward) {
+        if (!visitedForward.has(hash)) {
+          visitedForward.add(hash);
+          enqueue = true;
+        }
+      } else if (!visitedBackward.has(hash)) {
+        visitedBackward.add(hash);
+        enqueue = true;
       }
 
-      if (direction === Direction.Backward && !visitedBackward.has(hash)) {
-        visitedBackward.add(hash);
-        queue.enqueue({
+      if (enqueue) {
+        const neighbourNode = {
           searchNode: {
             pos: neighbourPos,
             prev: searchNode,
           },
           direction,
-        });
+        };
+
+        nodeHistory.push(neighbourNode);
+        queue.enqueue(neighbourNode);
       }
     }
   }
 };
 
 const rewind = (node: SearchNode): Vec2d[] => {
+  const intersection = nodeHistory.filter(({ searchNode }) => node.pos.equals(searchNode.pos));
 
-  return [];
+  return [...defaultRewind(intersection[0].searchNode), ...defaultRewind(intersection[1].searchNode).reverse()];
 };
 
 const biDirBfs: SearchMethod = { start, rewind };
