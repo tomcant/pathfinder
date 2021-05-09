@@ -1,9 +1,7 @@
 import { useState } from "react";
 import Vec2d from "./search/utils/Vec2d";
-import { rewindPath } from "./search/search";
 import SearchMap, { Square } from "./search/SearchMap";
-
-import breadthFirstSearch from "./search/algorithms/breadth-first-search";
+import methods from "./search/methods";
 
 const sleep = async (ms: number): Promise<void> => {
   await new Promise((r) => setTimeout(r, ms));
@@ -66,26 +64,19 @@ const PathFinder = (): JSX.Element => {
   };
 
   const handleStartClick = async (): Promise<void> => {
-    let targetNode;
-
-    // @ts-ignore
-    for (const { current, found, visited } of breadthFirstSearch({ map, start, target })) {
+    for (const { current, found, visited } of methods["breadth-first-search"].start({ map, start, target })) {
       setVisited(new Set([...visited]));
 
       if (found) {
-        targetNode = current;
+        for (const pos of methods["breadth-first-search"].rewind(current)) {
+          setSolution(new Set([...solution.add(pos.toString())]));
+          await sleep(20);
+        }
+
         break;
       }
 
       await sleep(10);
-    }
-
-    if (targetNode) {
-      for (const pos of rewindPath(targetNode)) {
-        // @ts-ignore
-        setSolution(new Set([...solution.add(pos.toString())]));
-        await sleep(20);
-      }
     }
   };
 

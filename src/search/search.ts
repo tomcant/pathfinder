@@ -18,7 +18,12 @@ export type SearchState = {
   found: boolean;
 };
 
-export const rewindPath = (node: SearchNode): Vec2d[] => {
+export type SearchMethod = {
+  start: (params: SearchParams) => Generator<SearchState>;
+  rewind: (node: SearchNode) => Vec2d[];
+};
+
+export const rewind = (node: SearchNode): Vec2d[] => {
   const path = [];
 
   while (node.prev) {
