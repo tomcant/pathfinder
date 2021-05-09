@@ -24,6 +24,6 @@ const start = function* ({ map, start, target }: SearchParams): Generator<Search
   }
 };
 
-const bfs: SearchMethod = { start, rewind };
+const bfs: SearchMethod = { name: "Breadth First Search", start, rewind };
 
 export default bfs;

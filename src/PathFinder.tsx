@@ -24,6 +24,7 @@ const PathFinder = (): JSX.Element => {
   const [visited, setVisited] = useState(new Set<string>());
   const [solution, setSolution] = useState(new Set<string>());
 
+  const [method, setMethod] = useState("breadth-first-search");
   const [moving, setMoving] = useState(MovingState.None);
   const [isDrawing, setIsDrawing] = useState(false);
 
@@ -64,11 +65,13 @@ const PathFinder = (): JSX.Element => {
   };
 
   const handleStartClick = async (): Promise<void> => {
-    for (const { current, found, visited } of methods["bi-directional-bfs"].start({ map, start, target })) {
+    // @ts-ignore
+    for (const { current, found, visited } of methods[method].start({ map, start, target })) {
       setVisited(new Set([...visited]));
 
       if (found) {
-        for (const pos of methods["bi-directional-bfs"].rewind(current)) {
+        // @ts-ignore
+        for (const pos of methods[method].rewind(current)) {
           setSolution(new Set([...solution.add(pos.toString())]));
           await sleep(20);
         }
@@ -93,6 +96,10 @@ const PathFinder = (): JSX.Element => {
     const map = getInitialMap();
     map.generateWalls();
     setMap(map);
+  };
+
+  const handleMethodSelect = (e: any): void => {
+    setMethod(e.target.value);
   };
 
   const getClassName = (pos: Vec2d): string => {
@@ -147,6 +154,13 @@ const PathFinder = (): JSX.Element => {
         <button onClick={handleStartClick}>Start</button>
         <button onClick={handleResetClick}>Reset</button>
         <button onClick={handleGenerateMapClick}>Generate map</button>
+        <select onChange={handleMethodSelect}>
+          {Object.entries(methods).map(([key, method]) => (
+            <option key={key} value={key}>
+              {method.name}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="Map">{buildMapSquares()}</div>
     </div>
