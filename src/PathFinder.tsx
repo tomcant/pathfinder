@@ -16,13 +16,15 @@ enum MovingState {
 const getInitialMap = () => new SearchMap(40, 20);
 const getInitialStart = () => new Vec2d(1, 1);
 const getInitialTarget = () => new Vec2d(38, 18);
+const getInitialVisited = () => new Set<string>();
+const getInitialSolution = () => new Set<string>();
 
 const PathFinder = (): JSX.Element => {
   const [map, setMap] = useState(getInitialMap());
   const [start, setStart] = useState(getInitialStart());
   const [target, setTarget] = useState(getInitialTarget());
-  const [visited, setVisited] = useState(new Set<string>());
-  const [solution, setSolution] = useState(new Set<string>());
+  const [visited, setVisited] = useState(getInitialVisited());
+  const [solution, setSolution] = useState(getInitialSolution());
 
   const [method, setMethod] = useState("breadth-first-search");
   const [moving, setMoving] = useState(MovingState.None);
@@ -65,6 +67,9 @@ const PathFinder = (): JSX.Element => {
   };
 
   const handleStartClick = async (): Promise<void> => {
+    const solution = getInitialSolution();
+    setSolution(solution);
+
     // @ts-ignore
     for (const { current, found, visited } of methods[method].start({ map, start, target })) {
       setVisited(new Set([...visited]));
@@ -87,8 +92,8 @@ const PathFinder = (): JSX.Element => {
     setMap(getInitialMap());
     setStart(getInitialStart());
     setTarget(getInitialTarget());
-    setVisited(new Set<string>());
-    setSolution(new Set<string>());
+    setVisited(getInitialVisited());
+    setSolution(getInitialVisited());
   };
 
   const handleGenerateMapClick = (): void => {
