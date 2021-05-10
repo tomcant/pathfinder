@@ -12,9 +12,11 @@ type BiDirSearchNode = {
   direction: Direction;
 };
 
-const nodeHistory: BiDirSearchNode[] = [];
+let nodeHistory: BiDirSearchNode[];
 
 const start = function* ({ map, start, target }: SearchParams): Generator<SearchState> {
+  nodeHistory = [];
+
   const visitedForward = new Set<string>([start.toString()]);
   const visitedBackward = new Set<string>([target.toString()]);
 
