@@ -1,9 +1,9 @@
 import breadthFirstSearch from "./breadth-first-search";
-import biDirectionalBfs from "./bi-directional-bfs";
+import biDirectionalBfs from "./bidirectional-bfs";
 
 const methods = {
   "breadth-first-search": breadthFirstSearch,
-  "bi-directional-bfs": biDirectionalBfs,
+  "bidirectional-bfs": biDirectionalBfs,
 };
 
 export default methods;
