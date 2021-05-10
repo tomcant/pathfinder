@@ -71,7 +71,9 @@ const start = function* ({ map, start, target }: SearchParams): Generator<Search
 };
 
 const rewind = (node: SearchNode): Vec2d[] => {
-  const intersection = nodeHistory.filter(({ searchNode }) => node.pos.equals(searchNode.pos));
+  const intersection = nodeHistory
+    .filter(({ searchNode }) => node.pos.equals(searchNode.pos))
+    .sort(({ direction }) => (direction === Direction.Forward ? -1 : 1));
 
   return [...defaultRewind(intersection[0].searchNode), ...defaultRewind(intersection[1].searchNode).reverse()];
 };
