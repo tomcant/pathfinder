@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, CSSProperties } from "react";
 import Vec2d from "./search/utils/Vec2d";
 import SearchMap, { Square } from "./search/SearchMap";
 import methods from "./search/methods";
@@ -13,16 +13,24 @@ enum MovingState {
   Target,
 }
 
-const getInitialMap = () => new SearchMap(40, 20);
-const getInitialStart = () => new Vec2d(1, 1);
-const getInitialTarget = () => new Vec2d(38, 18);
+const getInitialMap = (width: number, height: number) => new SearchMap(width, height);
+const getInitialStart = (height: number) => new Vec2d(2, Math.floor(height / 2));
+const getInitialTarget = (width: number, height: number) => new Vec2d(width - 3, Math.floor(height / 2));
 const getInitialVisited = () => new Set<string>();
 const getInitialSolution = () => new Set<string>();
 
-const PathFinder = (): JSX.Element => {
-  const [map, setMap] = useState(getInitialMap());
-  const [start, setStart] = useState(getInitialStart());
-  const [target, setTarget] = useState(getInitialTarget());
+type PathFinderProps = {
+  mapDimensions: {
+    width: number;
+    height: number;
+  };
+  mapStyles: CSSProperties;
+};
+
+const PathFinder = ({ mapDimensions: { width, height }, mapStyles }: PathFinderProps): JSX.Element => {
+  const [map, setMap] = useState(getInitialMap(width, height));
+  const [start, setStart] = useState(getInitialStart(height));
+  const [target, setTarget] = useState(getInitialTarget(width, height));
   const [visited, setVisited] = useState(getInitialVisited());
   const [solution, setSolution] = useState(getInitialSolution());
 
@@ -88,19 +96,12 @@ const PathFinder = (): JSX.Element => {
     }
   };
 
-  const handleResetClick = (): void => {
-    setMap(getInitialMap());
-    setStart(getInitialStart());
-    setTarget(getInitialTarget());
+  const handleClearClick = (): void => {
+    setMap(getInitialMap(width, height));
+    setStart(getInitialStart(height));
+    setTarget(getInitialTarget(width, height));
     setVisited(getInitialVisited());
-    setSolution(getInitialVisited());
-  };
-
-  const handleGenerateMapClick = (): void => {
-    handleResetClick();
-    const map = getInitialMap();
-    map.generateWalls();
-    setMap(map);
+    setSolution(getInitialSolution());
   };
 
   const handleMethodSelect = (e: any): void => {
@@ -157,8 +158,7 @@ const PathFinder = (): JSX.Element => {
     <div className="PathFinder">
       <div className="Controls">
         <button onClick={handleStartClick}>Start</button>
-        <button onClick={handleResetClick}>Reset</button>
-        <button onClick={handleGenerateMapClick}>Generate map</button>
+        <button onClick={handleClearClick}>Clear</button>
         <select onChange={handleMethodSelect}>
           {Object.entries(methods).map(([key, method]) => (
             <option key={key} value={key}>
@@ -167,7 +167,9 @@ const PathFinder = (): JSX.Element => {
           ))}
         </select>
       </div>
-      <div className="Map">{buildMapSquares()}</div>
+      <div className="Map" style={mapStyles}>
+        {buildMapSquares()}
+      </div>
     </div>
   );
 };

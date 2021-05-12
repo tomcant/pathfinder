@@ -1,4 +1,4 @@
-import { SearchState, SearchNode, SearchParams, SearchMethod, rewind } from "../search";
+import { SearchState, SearchNode, SearchParams, SearchMethod, rewind } from "../";
 import Queue from "../utils/Queue";
 
 const start = function* ({ map, start, target }: SearchParams): Generator<SearchState> {

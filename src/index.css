@@ -1,5 +1,9 @@
 @import url("https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css");
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   max-width: none;
 }
@@ -10,25 +14,21 @@ body {
 
 .Controls > * {
   margin-right: 0.5rem;
+  margin-bottom: 0;
 }
 
 .Map {
   display: grid;
-  width: 1000px;
-  grid-template: repeat(20, 25px) / repeat(40, 25px);
-  background-color: var(--nc-bg-1);
-  border: 1px solid var(--nc-bg-3);
 }
 
 .Map > div {
   width: 25px;
   height: 25px;
-  cursor: pointer;
   line-height: 25px;
   text-align: center;
+  cursor: pointer;
   user-select: none;
   border: 1px solid var(--nc-bg-3);
-  box-sizing: border-box;
   transition: all 0.1s linear;
 }
 

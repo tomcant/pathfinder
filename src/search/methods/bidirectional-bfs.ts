@@ -1,4 +1,4 @@
-import { SearchState, SearchNode, SearchParams, SearchMethod, rewind as defaultRewind } from "../search";
+import { SearchState, SearchNode, SearchParams, SearchMethod, rewind as defaultRewind } from "../";
 import Queue from "../utils/Queue";
 import Vec2d from "../utils/Vec2d";
 
