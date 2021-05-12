@@ -3,30 +3,28 @@ import ReactDOM from "react-dom";
 import PathFinder from "./PathFinder";
 import "./index.css";
 
-const calcMapDimensions = () => {
+const buildPathFinderProps = () => {
   // @ts-ignore
-  const bodyPadding = window.getComputedStyle(document.querySelector("body")).getPropertyValue("padding");
+  const bodyPadding = parseInt(getComputedStyle(document.body).getPropertyValue("padding"));
   // @ts-ignore
-  const headerHeight = window.getComputedStyle(document.querySelector("header")).getPropertyValue("height");
+  const headerHeight = parseInt(getComputedStyle(document.querySelector("header")).getPropertyValue("height"));
+  const squareWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--map-square-width"));
+
+  const cols = Math.floor((window.innerWidth - 2 * bodyPadding) / squareWidth);
+  const rows = Math.floor((window.innerHeight - 2 * headerHeight - bodyPadding) / squareWidth);
 
   return {
-    width: Math.floor((window.innerWidth - 2 * parseInt(bodyPadding)) / 25),
-    height: Math.floor((window.innerHeight - 2 * parseInt(headerHeight) - parseInt(bodyPadding)) / 25),
+    mapSize: { cols, rows },
+    mapStyles: {
+      gridTemplateColumns: `repeat(${cols}, ${squareWidth}px)`,
+      gridTemplateRows: `repeat(${rows}, ${squareWidth}px)`,
+    },
   };
-};
-
-const getMapStyles = () => {
-  const { width, height } = calcMapDimensions();
-
-  return { gridTemplate: `repeat(${height}, 25px) / repeat(${width}, 25px)` };
 };
 
 ReactDOM.render(
   <React.StrictMode>
-    <PathFinder
-      mapDimensions={calcMapDimensions()}
-      mapStyles={getMapStyles()}
-    />
+    <PathFinder {...buildPathFinderProps()} />
   </React.StrictMode>,
   document.getElementById("root")
 );

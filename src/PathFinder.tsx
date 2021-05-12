@@ -1,10 +1,15 @@
 import { useState, CSSProperties } from "react";
-import Vec2d from "./search/utils/Vec2d";
 import SearchMap, { Square } from "./search/SearchMap";
 import methods from "./search/methods";
+import Vec2d from "./search/utils/Vec2d";
+import sleep from "./utils/sleep";
 
-const sleep = async (ms: number): Promise<void> => {
-  await new Promise((r) => setTimeout(r, ms));
+type PathFinderProps = {
+  mapSize: {
+    cols: number;
+    rows: number;
+  };
+  mapStyles: CSSProperties;
 };
 
 enum MovingState {
@@ -13,24 +18,16 @@ enum MovingState {
   Target,
 }
 
-const getInitialMap = (width: number, height: number) => new SearchMap(width, height);
-const getInitialStart = (height: number) => new Vec2d(2, Math.floor(height / 2));
-const getInitialTarget = (width: number, height: number) => new Vec2d(width - 3, Math.floor(height / 2));
+const getInitialMap = (cols: number, rows: number) => new SearchMap(cols, rows);
+const getInitialStart = (cols: number, rows: number) => new Vec2d(Math.floor(cols / 4) - 1, Math.floor(rows / 2) - 1);
+const getInitialTarget = (cols: number, rows: number) => new Vec2d(cols - Math.floor(cols / 4), Math.floor(rows / 2) - 1);
 const getInitialVisited = () => new Set<string>();
 const getInitialSolution = () => new Set<string>();
 
-type PathFinderProps = {
-  mapDimensions: {
-    width: number;
-    height: number;
-  };
-  mapStyles: CSSProperties;
-};
-
-const PathFinder = ({ mapDimensions: { width, height }, mapStyles }: PathFinderProps): JSX.Element => {
-  const [map, setMap] = useState(getInitialMap(width, height));
-  const [start, setStart] = useState(getInitialStart(height));
-  const [target, setTarget] = useState(getInitialTarget(width, height));
+const PathFinder = ({ mapSize: { cols, rows }, mapStyles }: PathFinderProps): JSX.Element => {
+  const [map, setMap] = useState(getInitialMap(cols, rows));
+  const [start, setStart] = useState(getInitialStart(cols, rows));
+  const [target, setTarget] = useState(getInitialTarget(cols, rows));
   const [visited, setVisited] = useState(getInitialVisited());
   const [solution, setSolution] = useState(getInitialSolution());
 
@@ -55,7 +52,7 @@ const PathFinder = ({ mapDimensions: { width, height }, mapStyles }: PathFinderP
     }
 
     setIsDrawing(true);
-    setMap(map.withCell(pos, map.isEmpty(pos) ? Square.Wall : Square.Empty));
+    setMap(map.withSquare(pos, map.isEmpty(pos) ? Square.Wall : Square.Empty));
   };
 
   const handleMouseEnter = (pos: Vec2d): void => {
@@ -70,7 +67,7 @@ const PathFinder = ({ mapDimensions: { width, height }, mapStyles }: PathFinderP
     }
 
     if (isDrawing) {
-      setMap(map.withCell(pos, Square.Wall));
+      setMap(map.withSquare(pos, Square.Wall));
     }
   };
 
@@ -97,9 +94,9 @@ const PathFinder = ({ mapDimensions: { width, height }, mapStyles }: PathFinderP
   };
 
   const handleClearClick = (): void => {
-    setMap(getInitialMap(width, height));
-    setStart(getInitialStart(height));
-    setTarget(getInitialTarget(width, height));
+    setMap(getInitialMap(cols, rows));
+    setStart(getInitialStart(cols, rows));
+    setTarget(getInitialTarget(cols, rows));
     setVisited(getInitialVisited());
     setSolution(getInitialSolution());
   };
@@ -135,8 +132,8 @@ const PathFinder = ({ mapDimensions: { width, height }, mapStyles }: PathFinderP
   const buildMapSquares = (): JSX.Element[] => {
     const squares = [];
 
-    for (let y = 0; y < map.height; ++y) {
-      for (let x = 0; x < map.width; ++x) {
+    for (let y = 0; y < map.numRows; ++y) {
+      for (let x = 0; x < map.numCols; ++x) {
         const pos = new Vec2d(x, y);
 
         squares.push(

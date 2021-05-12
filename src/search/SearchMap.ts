@@ -6,29 +6,29 @@ export enum Square {
 }
 
 export default class SearchMap {
-  private rows: Square[][] = [];
+  private squares: Square[][] = [];
 
-  public constructor(width: number, height: number) {
-    while (height--) {
-      this.rows.push(Array(width).fill(Square.Empty));
+  public constructor(numCols: number, numRows: number) {
+    while (numRows--) {
+      this.squares.push(Array(numCols).fill(Square.Empty));
     }
   }
 
-  public withCell(pos: Vec2d, square: Square): SearchMap {
+  public withSquare(pos: Vec2d, square: Square): SearchMap {
     if (!this.isWithinBounds(pos)) {
       throw new Error(`Out of bounds: ${pos.toString()}`);
     }
 
-    const map = new SearchMap(this.width, this.height);
+    const map = new SearchMap(this.numCols, this.numRows);
 
-    map.rows = this.rows;
-    map.rows[pos.y][pos.x] = square;
+    map.squares = this.squares;
+    map.squares[pos.y][pos.x] = square;
 
     return map;
   }
 
   public isEmpty(pos: Vec2d): boolean {
-    return this.rows[pos.y][pos.x] === Square.Empty;
+    return this.squares[pos.y][pos.x] === Square.Empty;
   }
 
   public getNeighbours(pos: Vec2d): Vec2d[] {
@@ -57,14 +57,14 @@ export default class SearchMap {
   }
 
   private isWithinBounds(pos: Vec2d): boolean {
-    return pos.x >= 0 && pos.y >= 0 && pos.x < this.width && pos.y < this.height;
+    return pos.x >= 0 && pos.y >= 0 && pos.x < this.numCols && pos.y < this.numRows;
   }
 
-  public get width(): number {
-    return this.rows[0].length;
+  public get numCols(): number {
+    return this.squares[0].length;
   }
 
-  public get height(): number {
-    return this.rows.length;
+  public get numRows(): number {
+    return this.squares.length;
   }
 }

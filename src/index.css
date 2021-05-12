@@ -1,5 +1,10 @@
 @import url("https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css");
 
+:root {
+  --map-square-width: 25px;
+  --solution-bg-color: #99c6fa;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -22,9 +27,9 @@ body {
 }
 
 .Map > div {
-  width: 25px;
-  height: 25px;
-  line-height: 25px;
+  width: var(--map-square-width);
+  height: var(--map-square-width);
+  line-height: var(--map-square-width);
   text-align: center;
   cursor: pointer;
   user-select: none;
@@ -54,7 +59,7 @@ body {
 }
 
 .Map > div.solution {
-  background-color: #99c6fa;
-  border-color: #99c6fa;
+  background-color: var(--solution-bg-color);
+  border-color: var(--solution-bg-color);
   transition-duration: 0.25s;
 }
