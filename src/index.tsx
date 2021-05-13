@@ -5,7 +5,7 @@ import "./index.css";
 
 const buildPathFinderProps = () => {
   // @ts-ignore
-  const bodyPadding = parseInt(getComputedStyle(document.body).getPropertyValue("padding"));
+  const bodyPadding = parseInt(getComputedStyle(document.body).getPropertyValue("padding-left"));
   // @ts-ignore
   const headerHeight = parseInt(getComputedStyle(document.querySelector("header")).getPropertyValue("height"));
   const squareWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--map-square-width"));
