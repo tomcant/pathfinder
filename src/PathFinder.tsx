@@ -66,7 +66,7 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyles }: PathFinderProps): JS
       return;
     }
 
-    if (isDrawing) {
+    if (isDrawing && !pos.equals(start) && !pos.equals(target)) {
       setMap(map.withSquare(pos, Square.Wall));
     }
   };
