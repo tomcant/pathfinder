@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from "react";
-import SearchMap, { Square } from "../search/SearchMap";
+import React, { useState } from "react";
+import SearchMap from "../search/SearchMap";
 import methods from "../search/methods";
 import Vec2d from "../search/utils/Vec2d";
 import sleep from "./utils/sleep";
 import Controls from "./Controls";
-import Map from "./Map";
+import PathMap from "./PathMap";
 
 type PathFinderProps = {
   mapSize: {
@@ -27,9 +27,9 @@ const getInitialVisited = () => new Set<string>();
 const getInitialSolution = () => new Set<string>();
 
 const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX.Element => {
-  const [map, setMap] = useState(useMemo(() => getInitialMap(cols, rows), [cols, rows]));
-  const [start, setStart] = useState(useMemo(() => getInitialStart(cols, rows), [cols, rows]));
-  const [target, setTarget] = useState(useMemo(() => getInitialTarget(cols, rows), [cols, rows]));
+  const [map, setMap] = useState(getInitialMap(cols, rows));
+  const [start, setStart] = useState(getInitialStart(cols, rows));
+  const [target, setTarget] = useState(getInitialTarget(cols, rows));
   const [visited, setVisited] = useState(getInitialVisited());
   const [solution, setSolution] = useState(getInitialSolution());
 
@@ -54,7 +54,7 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
     }
 
     setIsDrawing(true);
-    setMap(map.withSquare(pos, map.isEmpty(pos) ? Square.Wall : Square.Empty));
+    setMap(map.toggleWall(pos));
   };
 
   const handleMouseEnter = (pos: Vec2d): void => {
@@ -69,7 +69,7 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
     }
 
     if (isDrawing && !pos.equals(start) && !pos.equals(target)) {
-      setMap(map.withSquare(pos, Square.Wall));
+      setMap(map.toggleWall(pos));
     }
   };
 
@@ -108,7 +108,7 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
   };
 
   const getSquareClassName = (pos: Vec2d): string => {
-    if (!map.isEmpty(pos)) {
+    if (map.isWall(pos)) {
       return "wall";
     }
 
@@ -134,7 +134,7 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
   return (
     <div className="PathFinder">
       <Controls onStartClick={handleStartClick} onClearClick={handleClearClick} onMethodSelect={handleMethodSelect} />
-      <Map
+      <PathMap
         numRows={rows}
         numCols={cols}
         style={mapStyle}

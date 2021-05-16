@@ -1,7 +1,7 @@
 import React from "react";
 import Vec2d from "../search/utils/Vec2d";
 
-type MapProps = {
+type PathMapProps = {
   numRows: number,
   numCols: number,
   style: React.CSSProperties;
@@ -11,7 +11,7 @@ type MapProps = {
   onMouseEnter: (pos: Vec2d) => void;
 };
 
-const Map = (props: MapProps): JSX.Element => {
+const PathMap = (props: PathMapProps): JSX.Element => {
   const squares = [];
 
   for (let row = 0; row < props.numRows; ++row) {
@@ -31,10 +31,10 @@ const Map = (props: MapProps): JSX.Element => {
   }
 
   return (
-    <div className="Map" style={props.style}>
+    <div className="PathMap" style={props.style}>
       {squares}
     </div>
   );
 };
 
-export default Map;
+export default PathMap;
