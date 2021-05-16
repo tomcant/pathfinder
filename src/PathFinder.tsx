@@ -1,4 +1,4 @@
-import { useState, CSSProperties } from "react";
+import React, { useMemo, useState } from "react";
 import SearchMap, { Square } from "./search/SearchMap";
 import methods from "./search/methods";
 import Vec2d from "./search/utils/Vec2d";
@@ -10,7 +10,7 @@ type PathFinderProps = {
     cols: number;
     rows: number;
   };
-  mapStyles: CSSProperties;
+  mapStyles: React.CSSProperties;
 };
 
 enum MovingState {
@@ -26,9 +26,9 @@ const getInitialVisited = () => new Set<string>();
 const getInitialSolution = () => new Set<string>();
 
 const PathFinder = ({ mapSize: { cols, rows }, mapStyles }: PathFinderProps): JSX.Element => {
-  const [map, setMap] = useState(getInitialMap(cols, rows));
-  const [start, setStart] = useState(getInitialStart(cols, rows));
-  const [target, setTarget] = useState(getInitialTarget(cols, rows));
+  const [map, setMap] = useState(useMemo(() => getInitialMap(cols, rows), [cols, rows]));
+  const [start, setStart] = useState(useMemo(() => getInitialStart(cols, rows), [cols, rows]));
+  const [target, setTarget] = useState(useMemo(() => getInitialTarget(cols, rows), [cols, rows]));
   const [visited, setVisited] = useState(getInitialVisited());
   const [solution, setSolution] = useState(getInitialSolution());
 
