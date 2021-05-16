@@ -1,5 +1,5 @@
 import { FormEvent } from "react";
-import methods from "./search/methods";
+import methods from "../search/methods";
 
 type ControlsProps = {
   onStartClick: () => void;
@@ -13,7 +13,9 @@ const Controls = (props: ControlsProps): JSX.Element => (
     <button onClick={props.onClearClick}>Clear</button>
     <select onChange={props.onMethodSelect}>
       {Object.entries(methods).map(([key, method]) => (
-        <option key={key} value={key}>{method.name}</option>
+        <option key={key} value={key}>
+          {method.name}
+        </option>
       ))}
     </select>
   </div>

@@ -1,16 +1,17 @@
 import React, { useMemo, useState } from "react";
-import SearchMap, { Square } from "./search/SearchMap";
-import methods from "./search/methods";
-import Vec2d from "./search/utils/Vec2d";
+import SearchMap, { Square } from "../search/SearchMap";
+import methods from "../search/methods";
+import Vec2d from "../search/utils/Vec2d";
 import sleep from "./utils/sleep";
 import Controls from "./Controls";
+import Map from "./Map";
 
 type PathFinderProps = {
   mapSize: {
     cols: number;
     rows: number;
   };
-  mapStyles: React.CSSProperties;
+  mapStyle: React.CSSProperties;
 };
 
 enum MovingState {
@@ -25,7 +26,7 @@ const getInitialTarget = (cols: number, rows: number) => new Vec2d(cols - Math.f
 const getInitialVisited = () => new Set<string>();
 const getInitialSolution = () => new Set<string>();
 
-const PathFinder = ({ mapSize: { cols, rows }, mapStyles }: PathFinderProps): JSX.Element => {
+const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX.Element => {
   const [map, setMap] = useState(useMemo(() => getInitialMap(cols, rows), [cols, rows]));
   const [start, setStart] = useState(useMemo(() => getInitialStart(cols, rows), [cols, rows]));
   const [target, setTarget] = useState(useMemo(() => getInitialTarget(cols, rows), [cols, rows]));
@@ -106,7 +107,7 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyles }: PathFinderProps): JS
     setMethod(e.target.value);
   };
 
-  const getClassName = (pos: Vec2d): string => {
+  const getSquareClassName = (pos: Vec2d): string => {
     if (!map.isEmpty(pos)) {
       return "wall";
     }
@@ -130,34 +131,18 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyles }: PathFinderProps): JS
     return "";
   };
 
-  const buildMapSquares = (): JSX.Element[] => {
-    const squares = [];
-
-    for (let y = 0; y < map.numRows; ++y) {
-      for (let x = 0; x < map.numCols; ++x) {
-        const pos = new Vec2d(x, y);
-
-        squares.push(
-          <div
-            key={pos.toString()}
-            className={getClassName(pos)}
-            onMouseUp={() => handleMouseUp()}
-            onMouseDown={() => handleMouseDown(pos)}
-            onMouseEnter={() => handleMouseEnter(pos)}
-          />
-        );
-      }
-    }
-
-    return squares;
-  };
-
   return (
     <div className="PathFinder">
       <Controls onStartClick={handleStartClick} onClearClick={handleClearClick} onMethodSelect={handleMethodSelect} />
-      <div className="Map" style={mapStyles}>
-        {buildMapSquares()}
-      </div>
+      <Map
+        numRows={rows}
+        numCols={cols}
+        style={mapStyle}
+        getSquareClassName={getSquareClassName}
+        onMouseUp={handleMouseUp}
+        onMouseDown={handleMouseDown}
+        onMouseEnter={handleMouseEnter}
+      />
     </div>
   );
 };

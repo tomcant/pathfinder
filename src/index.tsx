@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import PathFinder from "./PathFinder";
+import PathFinder from "./Components/PathFinder";
 import "./index.css";
 
 const buildPathFinderProps = () => {
@@ -15,7 +15,7 @@ const buildPathFinderProps = () => {
 
   return {
     mapSize: { cols, rows },
-    mapStyles: {
+    mapStyle: {
       gridTemplateColumns: `repeat(${cols}, ${squareWidth}px)`,
       gridTemplateRows: `repeat(${rows}, ${squareWidth}px)`,
     },
