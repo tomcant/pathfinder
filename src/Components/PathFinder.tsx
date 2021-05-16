@@ -103,6 +103,33 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
     setSolution(getInitialSolution());
   };
 
+  const handleGenerateClick = (): void => {
+    handleClearClick();
+
+    const start = Vec2d.random(cols, rows);
+    const target = Vec2d.random(cols, rows);
+
+    setStart(start);
+    setTarget(target);
+
+    let map = getInitialMap(cols, rows);
+
+    for (let row = 0; row < rows; ++row) {
+      for (let col = 0; col < cols; ++col) {
+        const pos = new Vec2d(col, row);
+
+        if (start.equals(pos) || target.equals(pos)) {
+          continue;
+        }
+
+        if (Math.random() < 0.25) {
+          map = map.toggleWall(pos);
+          setMap(map);
+        }
+      }
+    }
+  };
+
   const handleMethodSelect = (e: any): void => {
     setMethod(e.target.value);
   };
@@ -133,7 +160,12 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
 
   return (
     <div className="PathFinder">
-      <Controls onStartClick={handleStartClick} onClearClick={handleClearClick} onMethodSelect={handleMethodSelect} />
+      <Controls
+        onStartClick={handleStartClick}
+        onClearClick={handleClearClick}
+        onGenerateClick={handleGenerateClick}
+        onMethodSelect={handleMethodSelect}
+      />
       <PathMap
         numRows={rows}
         numCols={cols}

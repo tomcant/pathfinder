@@ -12,4 +12,8 @@ export default class Vec2d {
   public toString(): string {
     return `(${this.x}, ${this.y})`;
   }
+
+  public static random(maxX: number, maxY: number): Vec2d {
+    return new Vec2d(Math.floor(Math.random() * maxX), Math.floor(Math.random() * maxY));
+  }
 }

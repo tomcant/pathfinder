@@ -4,6 +4,7 @@ import methods from "../search/methods";
 type ControlsProps = {
   onStartClick: () => void;
   onClearClick: () => void;
+  onGenerateClick: () => void;
   onMethodSelect: (e: FormEvent<HTMLSelectElement>) => void;
 };
 
@@ -11,6 +12,7 @@ const Controls = (props: ControlsProps): JSX.Element => (
   <div className="Controls">
     <button onClick={props.onStartClick}>Start</button>
     <button onClick={props.onClearClick}>Clear</button>
+    <button onClick={props.onGenerateClick}>Generate</button>
     <select onChange={props.onMethodSelect}>
       {Object.entries(methods).map(([key, method]) => (
         <option key={key} value={key}>

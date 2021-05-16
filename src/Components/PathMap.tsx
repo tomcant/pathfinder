@@ -2,8 +2,8 @@ import React from "react";
 import Vec2d from "../search/utils/Vec2d";
 
 type PathMapProps = {
-  numRows: number,
-  numCols: number,
+  numRows: number;
+  numCols: number;
   style: React.CSSProperties;
   getSquareClassName: (pos: Vec2d) => string;
   onMouseUp: (pos: Vec2d) => void;
