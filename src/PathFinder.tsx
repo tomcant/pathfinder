@@ -3,6 +3,7 @@ import SearchMap, { Square } from "./search/SearchMap";
 import methods from "./search/methods";
 import Vec2d from "./search/utils/Vec2d";
 import sleep from "./utils/sleep";
+import Controls from "./Controls";
 
 type PathFinderProps = {
   mapSize: {
@@ -153,17 +154,7 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyles }: PathFinderProps): JS
 
   return (
     <div className="PathFinder">
-      <div className="Controls">
-        <button onClick={handleStartClick}>Start</button>
-        <button onClick={handleClearClick}>Clear</button>
-        <select onChange={handleMethodSelect}>
-          {Object.entries(methods).map(([key, method]) => (
-            <option key={key} value={key}>
-              {method.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      <Controls onStartClick={handleStartClick} onClearClick={handleClearClick} onMethodSelect={handleMethodSelect} />
       <div className="Map" style={mapStyles}>
         {buildMapSquares()}
       </div>
