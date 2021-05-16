@@ -5,8 +5,12 @@ export default class Queue<T> {
     this.items.push(...items);
   }
 
-  public dequeue(): T | undefined {
-    return this.items.shift();
+  public dequeue(): T {
+    if (this.isEmpty()) {
+      throw new Error("Cannot dequeue empty queue");
+    }
+
+    return this.items.shift() as T;
   }
 
   public isEmpty(): boolean {

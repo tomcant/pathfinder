@@ -32,7 +32,7 @@ const start = function* ({ map, start, target }: SearchParams): Generator<Search
   ]);
 
   while (!queue.isEmpty()) {
-    const { searchNode, direction } = queue.dequeue() as BiDirSearchNode;
+    const { searchNode, direction } = queue.dequeue();
 
     const found =
       (direction === Direction.Forward && visitedBackward.has(searchNode.pos.toString())) ||

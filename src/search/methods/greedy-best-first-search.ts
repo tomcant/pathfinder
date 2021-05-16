@@ -1,11 +1,18 @@
+import PriorityQueue from "ts-priority-queue";
 import { SearchState, SearchNode, SearchParams, SearchMethod, rewind } from "../";
-import Queue from "../utils/Queue";
+import Vec2d from "../utils/Vec2d";
+
+const manhattanDistance = (a: Vec2d, b: Vec2d): number => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 
 const start = function* ({ map, start, target }: SearchParams): Generator<SearchState> {
   const visited = new Set<string>([start.toString()]);
-  const queue = new Queue<SearchNode>([{ pos: start }]);
 
-  while (!queue.isEmpty()) {
+  const queue = new PriorityQueue<SearchNode>({
+    comparator: (a, b) => manhattanDistance(a.pos, target) - manhattanDistance(b.pos, target),
+    initialValues: [{ pos: start }],
+  });
+
+  while (queue.length > 0) {
     const searchNode = queue.dequeue();
 
     yield { current: searchNode, visited, found: searchNode.pos.equals(target) };
@@ -15,7 +22,7 @@ const start = function* ({ map, start, target }: SearchParams): Generator<Search
 
       if (!visited.has(hash)) {
         visited.add(hash);
-        queue.enqueue({
+        queue.queue({
           pos: neighbourPos,
           prev: searchNode,
         });
@@ -24,6 +31,6 @@ const start = function* ({ map, start, target }: SearchParams): Generator<Search
   }
 };
 
-const bfs: SearchMethod = { name: "Breadth-first search", start, rewind };
+const greedyBestFirstSearch: SearchMethod = { name: "Greedy best-first search", start, rewind };
 
-export default bfs;
+export default greedyBestFirstSearch;
