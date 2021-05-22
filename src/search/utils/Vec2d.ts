@@ -13,7 +13,10 @@ export default class Vec2d {
     return `(${this.x}, ${this.y})`;
   }
 
-  public static random(maxX: number, maxY: number): Vec2d {
-    return new Vec2d(Math.floor(Math.random() * maxX), Math.floor(Math.random() * maxY));
+  public static random(minX: number, minY: number, maxX: number, maxY: number): Vec2d {
+    return new Vec2d(
+      Math.floor(minX + Math.random() * (maxX - minX)),
+      Math.floor(minY + Math.random() * (maxY - minY))
+    );
   }
 }

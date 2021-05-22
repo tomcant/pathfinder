@@ -106,8 +106,8 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
   const handleGenerateClick = (): void => {
     handleClearClick();
 
-    const start = Vec2d.random(cols, rows);
-    const target = Vec2d.random(cols, rows);
+    const start = Vec2d.random(0, 0, cols / 3, rows / 3);
+    const target = Vec2d.random((cols * 2) / 3, (rows * 2) / 3, cols, rows);
 
     setStart(start);
     setTarget(target);
