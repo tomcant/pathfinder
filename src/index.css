@@ -26,7 +26,7 @@ body {
   display: grid;
 }
 
-.PathMap > div {
+.PathMap > * {
   width: var(--map-square-width);
   height: var(--map-square-width);
   line-height: var(--map-square-width);
@@ -37,28 +37,38 @@ body {
   transition: all 0.1s linear;
 }
 
-.PathMap > div[class=""]:hover,
-.PathMap > div:not([class]):hover {
+.PathMap > [class=""]:hover,
+.PathMap > :not([class]):hover {
   background-color: var(--nc-bg-2);
 }
 
-.PathMap > div.start {
+.PathMap > .start {
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.75 9.525l-4.586-4.586a1.5 1.5 0 00-2.121 2.122l4.586 4.585a.5.5 0 010 .708l-4.586 4.585a1.5 1.5 0 002.121 2.122l4.586-4.586a3.505 3.505 0 000-4.95z"/></svg>');
 }
 
-.PathMap > div.target {
+.PathMap > .target {
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4.5a7.5 7.5 0 107.5 7.5A7.508 7.508 0 0012 4.5zm0 12a4.5 4.5 0 114.5-4.5 4.505 4.505 0 01-4.5 4.5z"/></svg>');
 }
 
-.PathMap > div.visited {
+.PathMap > .visited {
   background-color: var(--nc-bg-2);
+  animation: visit 0.75s 1;
 }
 
-.PathMap > div.wall {
+@keyframes visit {
+  0% {
+    border-color: #888;
+  }
+  100% {
+    border-color: var(--nc-bg-3);
+  }
+}
+
+.PathMap > .wall {
   background-color: var(--nc-bg-3);
 }
 
-.PathMap > div.solution {
+.PathMap > .solution {
   background-color: var(--solution-bg-color);
   border-color: var(--solution-bg-color);
   transition-duration: 0.25s;
