@@ -44,13 +44,11 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
 
   const handleMouseDown = (pos: Vec2d): void => {
     if (pos.equals(start)) {
-      setMoving(MovingState.Start);
-      return;
+      return setMoving(MovingState.Start);
     }
 
     if (pos.equals(target)) {
-      setMoving(MovingState.Target);
-      return;
+      return setMoving(MovingState.Target);
     }
 
     setIsDrawing(true);
@@ -58,14 +56,8 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
   };
 
   const handleMouseEnter = (pos: Vec2d): void => {
-    if (moving === MovingState.Start) {
-      setStart(pos);
-      return;
-    }
-
-    if (moving === MovingState.Target) {
-      setTarget(pos);
-      return;
+    if (moving !== MovingState.None && !map.isWall(pos)) {
+      return moving === MovingState.Start ? setStart(pos) : setTarget(pos);
     }
 
     if (isDrawing && !pos.equals(start) && !pos.equals(target)) {
