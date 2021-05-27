@@ -77,7 +77,7 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
         // @ts-ignore
         for (const pos of methods[method].rewind(current)) {
           setSolution(new Set([...solution.add(pos.toString())]));
-          await sleep(15);
+          await sleep(5);
         }
 
         break;

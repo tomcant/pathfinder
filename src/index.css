@@ -50,7 +50,6 @@ body {
   cursor: pointer;
   user-select: none;
   border: 1px solid var(--map-border-color);
-  transition: all 0.1s linear;
 }
 
 .PathMap > [class=""]:hover,
@@ -59,25 +58,36 @@ body {
 }
 
 .PathMap > .start {
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.75 9.525l-4.586-4.586a1.5 1.5 0 00-2.121 2.122l4.586 4.585a.5.5 0 010 .708l-4.586 4.585a1.5 1.5 0 002.121 2.122l4.586-4.586a3.505 3.505 0 000-4.95z"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.75 9.525l-4.586-4.586a1.5 1.5 0 00-2.121 2.122l4.586 4.585a.5.5 0 010 .708l-4.586 4.585a1.5 1.5 0 002.121 2.122l4.586-4.586a3.505 3.505 0 000-4.95z"/></svg>');
 }
 
 .PathMap > .target {
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4.5a7.5 7.5 0 107.5 7.5A7.508 7.508 0 0012 4.5zm0 12a4.5 4.5 0 114.5-4.5 4.505 4.505 0 01-4.5 4.5z"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4.5a7.5 7.5 0 107.5 7.5A7.508 7.508 0 0012 4.5zm0 12a4.5 4.5 0 114.5-4.5 4.505 4.505 0 01-4.5 4.5z"/></svg>');
 }
 
 @media (prefers-color-scheme: dark) {
   .PathMap > .start {
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23eee" d="M15.75 9.525l-4.586-4.586a1.5 1.5 0 00-2.121 2.122l4.586 4.585a.5.5 0 010 .708l-4.586 4.585a1.5 1.5 0 002.121 2.122l4.586-4.586a3.505 3.505 0 000-4.95z"/></svg>');
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23eee" d="M15.75 9.525l-4.586-4.586a1.5 1.5 0 00-2.121 2.122l4.586 4.585a.5.5 0 010 .708l-4.586 4.585a1.5 1.5 0 002.121 2.122l4.586-4.586a3.505 3.505 0 000-4.95z"/></svg>');
   }
 
   .PathMap > .target {
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23eee" d="M12 4.5a7.5 7.5 0 107.5 7.5A7.508 7.508 0 0012 4.5zm0 12a4.5 4.5 0 114.5-4.5 4.505 4.505 0 01-4.5 4.5z"/></svg>');
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23eee" d="M12 4.5a7.5 7.5 0 107.5 7.5A7.508 7.508 0 0012 4.5zm0 12a4.5 4.5 0 114.5-4.5 4.505 4.505 0 01-4.5 4.5z"/></svg>');
   }
 }
 
 .PathMap > .wall {
   background-color: var(--wall-bg-color);
+  animation: wall 0.25s 1;
+}
+
+@keyframes wall {
+  0% {
+    transform: scale(1.5);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .PathMap > .visited {
@@ -88,16 +98,16 @@ body {
 @keyframes visited {
   0% {
     border-color: var(--frontier-border-color);
+    transform: scale(0.5);
   }
 
   100% {
-    border-color: var(--map-border-color);
+    transform: scale(1);
   }
 }
 
 .PathMap > .solution {
   background-color: var(--solution-bg-color);
-  transition-duration: 0.25s;
   position: relative;
 }
 
