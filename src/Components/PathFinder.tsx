@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { SearchState } from "../search";
 import SearchMap from "../search/SearchMap";
 import methods from "../search/methods";
 import Vec2d from "../search/utils/Vec2d";
@@ -32,10 +33,15 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
   const [target, setTarget] = useState(getInitialTarget(cols, rows));
   const [visited, setVisited] = useState(getInitialVisited());
   const [solution, setSolution] = useState(getInitialSolution());
+  const [seed, setSeed] = useState<{ state?: SearchState }>({});
 
   const [method, setMethod] = useState("greedy-best-first-search");
   const [moving, setMoving] = useState(MovingState.None);
   const [isDrawing, setIsDrawing] = useState(false);
+
+  const running = useRef(false);
+  const isRunning = (): boolean => running.current;
+  const setRunning = (r: boolean): void => void (running.current = r);
 
   const handleMouseUp = (): void => {
     setMoving(MovingState.None);
@@ -66,25 +72,40 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
   };
 
   const handleStartClick = async (): Promise<void> => {
+    setRunning(true);
+    let nextSeed = undefined;
     const solution = getInitialSolution();
     setSolution(solution);
 
     // @ts-ignore
-    for (const { current, found, visited } of methods[method].start({ map, start, target })) {
-      setVisited(new Set([...visited]));
+    for (const state of methods[method].start({ map, start, target }, seed.state)) {
+      if (!isRunning()) {
+        nextSeed = state;
+        break;
+      }
 
-      if (found) {
+      setVisited(new Set([...state.visited]));
+
+      if (state.found) {
         // @ts-ignore
-        for (const pos of methods[method].rewind(current)) {
+        for (const pos of methods[method].rewind(state.current)) {
           setSolution(new Set([...solution.add(pos.toString())]));
           await sleep(5);
         }
 
+        setSeed({});
         break;
       }
 
       await sleep(10);
     }
+
+    setRunning(false);
+    setSeed({ state: nextSeed });
+  };
+
+  const handleStopClick = (): void => {
+    setRunning(false);
   };
 
   const handleClearClick = (): void => {
@@ -93,6 +114,8 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
     setTarget(getInitialTarget(cols, rows));
     setVisited(getInitialVisited());
     setSolution(getInitialSolution());
+    setRunning(false);
+    setSeed({});
   };
 
   const handleGenerateClick = (): void => {
@@ -151,9 +174,11 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
   };
 
   return (
-    <div className="PathFinder">
+    <div className={`PathFinder${isRunning() ? " is-running" : ""}`}>
       <Controls
+        isRunning={isRunning()}
         onStartClick={handleStartClick}
+        onStopClick={handleStopClick}
         onClearClick={handleClearClick}
         onGenerateClick={handleGenerateClick}
         onMethodSelect={handleMethodSelect}

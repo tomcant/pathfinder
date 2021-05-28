@@ -20,7 +20,7 @@ export type SearchState = {
 
 export type SearchMethod = {
   name: string;
-  start: (params: SearchParams) => Generator<SearchState>;
+  start: (params: SearchParams, seed?: SearchState) => Generator<SearchState>;
   rewind: (node: SearchNode) => Vec2d[];
 };
 
