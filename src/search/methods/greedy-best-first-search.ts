@@ -4,12 +4,12 @@ import Vec2d from "../utils/Vec2d";
 
 const manhattanDistance = (a: Vec2d, b: Vec2d): number => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 
-const start = function* ({ map, start, target }: SearchParams, seed?: SearchState): Generator<SearchState> {
-  const visited = seed ? seed.visited : new Set<string>([start.toString()]);
+const start = function* ({ map, start, target }: SearchParams): Generator<SearchState> {
+  const visited = new Set<string>([start.toString()]);
 
   const queue = new PriorityQueue<SearchNode>({
     comparator: (a, b) => manhattanDistance(a.pos, target) - manhattanDistance(b.pos, target),
-    initialValues: [seed ? seed.current : { pos: start }],
+    initialValues: [{ pos: start }],
   });
 
   while (queue.length > 0) {

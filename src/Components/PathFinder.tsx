@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import { SearchState } from "../search";
 import SearchMap from "../search/SearchMap";
 import methods from "../search/methods";
 import Vec2d from "../search/utils/Vec2d";
@@ -33,15 +32,18 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
   const [target, setTarget] = useState(getInitialTarget(cols, rows));
   const [visited, setVisited] = useState(getInitialVisited());
   const [solution, setSolution] = useState(getInitialSolution());
-  const [seed, setSeed] = useState<{ state?: SearchState }>({});
 
   const [method, setMethod] = useState("greedy-best-first-search");
   const [moving, setMoving] = useState(MovingState.None);
   const [isDrawing, setIsDrawing] = useState(false);
+  const [, setStopTime] = useState(Date.now);
 
   const running = useRef(false);
   const isRunning = (): boolean => running.current;
-  const setRunning = (r: boolean): void => void (running.current = r);
+  const setRunning = (r: boolean): void => {
+    running.current = r;
+    if (!r) setStopTime(Date.now);
+  };
 
   const handleMouseUp = (): void => {
     setMoving(MovingState.None);
@@ -73,14 +75,12 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
 
   const handleStartClick = async (): Promise<void> => {
     setRunning(true);
-    let nextSeed = undefined;
     const solution = getInitialSolution();
     setSolution(solution);
 
     // @ts-ignore
-    for (const state of methods[method].start({ map, start, target }, seed.state)) {
+    for (const state of methods[method].start({ map, start, target })) {
       if (!isRunning()) {
-        nextSeed = state;
         break;
       }
 
@@ -93,7 +93,6 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
           await sleep(5);
         }
 
-        setSeed({});
         break;
       }
 
@@ -101,7 +100,6 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
     }
 
     setRunning(false);
-    setSeed({ state: nextSeed });
   };
 
   const handleStopClick = (): void => {
@@ -115,7 +113,6 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
     setVisited(getInitialVisited());
     setSolution(getInitialSolution());
     setRunning(false);
-    setSeed({});
   };
 
   const handleGenerateClick = (): void => {
