@@ -51,6 +51,10 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
   };
 
   const handleMouseDown = (pos: Vec2d): void => {
+    if (isRunning()) {
+      return;
+    }
+
     if (pos.equals(start)) {
       return setMoving(MovingState.Start);
     }

@@ -51,13 +51,17 @@ body {
   cursor: pointer;
 }
 
-.PathMap > [class=""]:hover,
-.PathMap > :not([class]):hover {
+.is-running .PathMap > * {
+  cursor: auto;
+}
+
+.PathFinder:not(.is-running) .PathMap > [class=""]:hover,
+.PathFinder:not(.is-running) .PathMap > :not([class]):hover {
   background-color: var(--map-hover-color);
 }
 
 .PathMap > .is-start {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.75 9.525l-4.586-4.586a1.5 1.5 0 00-2.121 2.122l4.586 4.585a.5.5 0 010 .708l-4.586 4.585a1.5 1.5 0 002.121 2.122l4.586-4.586a3.505 3.505 0 000-4.95z"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%230C4047" d="M15.75 9.525l-4.586-4.586a1.5 1.5 0 00-2.121 2.122l4.586 4.585a.5.5 0 010 .708l-4.586 4.585a1.5 1.5 0 002.121 2.122l4.586-4.586a3.505 3.505 0 000-4.95z"/></svg>');
 }
 
 @media (prefers-color-scheme: dark) {
