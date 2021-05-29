@@ -90,13 +90,13 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
         // @ts-ignore
         for (const pos of methods[method].rewind(state.current)) {
           setSolution(new Set([...solution.add(pos.toString())]));
-          await sleep(5);
+          await sleep(10);
         }
 
         break;
       }
 
-      await sleep(10);
+      await sleep(5);
     }
 
     setRunning(false);
@@ -148,23 +148,23 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
 
   const getSquareClassName = (pos: Vec2d): string => {
     if (map.isWall(pos)) {
-      return "wall";
+      return "is-wall";
     }
 
     if (start.equals(pos)) {
-      return "start";
+      return "is-start";
     }
 
     if (target.equals(pos)) {
-      return "target";
+      return "is-target";
     }
 
     if (solution.has(pos.toString())) {
-      return "solution";
+      return "is-solution";
     }
 
     if (visited.has(pos.toString())) {
-      return "visited";
+      return "is-visited";
     }
 
     return "";
