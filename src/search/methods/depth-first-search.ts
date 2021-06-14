@@ -1,14 +1,14 @@
-import { SearchState, SearchNode, SearchParams, SearchMethod, rewind } from "../";
+import { SearchMethod, SearchNode, SearchParams, SearchState, rewind } from "../";
 
 const dfs = function* (node: SearchNode, visited: Set<string>, params: SearchParams): Generator<SearchState> {
   yield { current: node, visited, found: node.pos.equals(params.target) };
 
-  for (const neighbourPos of params.map.getNeighbours(node.pos)) {
-    const hash = neighbourPos.toString();
+  for (const neighbour of params.map.getNeighbours(node.pos)) {
+    const hash = neighbour.toString();
 
     if (!visited.has(hash)) {
       visited.add(hash);
-      yield* dfs({ pos: neighbourPos, prev: node }, visited, params);
+      yield* dfs({ pos: neighbour, prev: node }, visited, params);
       visited.delete(hash);
     }
   }

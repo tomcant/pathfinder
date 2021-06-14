@@ -1,4 +1,4 @@
-import { SearchState, SearchNode, SearchParams, SearchMethod, rewind as defaultRewind } from "../";
+import { SearchMethod, SearchNode, SearchParams, SearchState, rewind as defaultRewind } from "../";
 import Queue from "../utils/Queue";
 import Vec2d from "../utils/Vec2d";
 
@@ -8,7 +8,7 @@ enum Direction {
 }
 
 type BiDirSearchNode = {
-  searchNode: SearchNode;
+  node: SearchNode;
   direction: Direction;
 };
 
@@ -22,26 +22,26 @@ const start = function* ({ map, start, target }: SearchParams): Generator<Search
 
   const queue = new Queue<BiDirSearchNode>([
     {
-      searchNode: { pos: start },
+      node: { pos: start },
       direction: Direction.Forward,
     },
     {
-      searchNode: { pos: target },
+      node: { pos: target },
       direction: Direction.Backward,
     },
   ]);
 
   while (!queue.isEmpty()) {
-    const { searchNode, direction } = queue.dequeue();
+    const { node, direction } = queue.dequeue();
 
     const found =
-      (direction === Direction.Forward && visitedBackward.has(searchNode.pos.toString())) ||
-      (direction === Direction.Backward && visitedForward.has(searchNode.pos.toString()));
+      (direction === Direction.Forward && visitedBackward.has(node.pos.toString())) ||
+      (direction === Direction.Backward && visitedForward.has(node.pos.toString()));
 
-    yield { current: searchNode, visited: new Set([...visitedForward, ...visitedBackward]), found };
+    yield { current: node, visited: new Set([...visitedForward, ...visitedBackward]), found };
 
-    for (const neighbourPos of map.getNeighbours(searchNode.pos)) {
-      const hash = neighbourPos.toString();
+    for (const neighbour of map.getNeighbours(node.pos)) {
+      const hash = neighbour.toString();
       let enqueue = false;
 
       if (direction === Direction.Forward) {
@@ -56,9 +56,9 @@ const start = function* ({ map, start, target }: SearchParams): Generator<Search
 
       if (enqueue) {
         const neighbourNode = {
-          searchNode: {
-            pos: neighbourPos,
-            prev: searchNode,
+          node: {
+            pos: neighbour,
+            prev: node,
           },
           direction,
         };
@@ -72,10 +72,10 @@ const start = function* ({ map, start, target }: SearchParams): Generator<Search
 
 const rewind = (node: SearchNode): Vec2d[] => {
   const intersection = nodeHistory
-    .filter(({ searchNode }) => node.pos.equals(searchNode.pos))
+    .filter(({ node: n }) => node.pos.equals(n.pos))
     .sort(({ direction }) => (direction === Direction.Forward ? -1 : 1));
 
-  return [...defaultRewind(intersection[0].searchNode), ...defaultRewind(intersection[1].searchNode).reverse()];
+  return [...defaultRewind(intersection[0].node), ...defaultRewind(intersection[1].node).reverse()];
 };
 
 const biDirBfs: SearchMethod = { name: "Bidirectional BFS", start, rewind };

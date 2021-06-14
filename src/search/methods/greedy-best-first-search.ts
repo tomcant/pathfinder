@@ -1,5 +1,5 @@
 import PriorityQueue from "ts-priority-queue";
-import { SearchState, SearchNode, SearchParams, SearchMethod, rewind } from "../";
+import { SearchMethod, SearchNode, SearchParams, SearchState, rewind } from "../";
 import Vec2d from "../utils/Vec2d";
 
 const manhattanDistance = (a: Vec2d, b: Vec2d): number => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
@@ -13,19 +13,16 @@ const start = function* ({ map, start, target }: SearchParams): Generator<Search
   });
 
   while (queue.length > 0) {
-    const searchNode = queue.dequeue();
+    const node = queue.dequeue();
 
-    yield { current: searchNode, visited, found: searchNode.pos.equals(target) };
+    yield { current: node, visited, found: node.pos.equals(target) };
 
-    for (const neighbourPos of map.getNeighbours(searchNode.pos)) {
-      const hash = neighbourPos.toString();
+    for (const neighbour of map.getNeighbours(node.pos)) {
+      const hash = neighbour.toString();
 
       if (!visited.has(hash)) {
         visited.add(hash);
-        queue.queue({
-          pos: neighbourPos,
-          prev: searchNode,
-        });
+        queue.queue({ pos: neighbour, prev: node });
       }
     }
   }

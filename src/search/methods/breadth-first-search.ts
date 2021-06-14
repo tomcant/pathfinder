@@ -1,4 +1,4 @@
-import { SearchState, SearchNode, SearchParams, SearchMethod, rewind } from "../";
+import { SearchMethod, SearchNode, SearchParams, SearchState, rewind } from "../";
 import Queue from "../utils/Queue";
 
 const start = function* ({ map, start, target }: SearchParams): Generator<SearchState> {
@@ -6,19 +6,16 @@ const start = function* ({ map, start, target }: SearchParams): Generator<Search
   const queue = new Queue<SearchNode>([{ pos: start }]);
 
   while (!queue.isEmpty()) {
-    const searchNode = queue.dequeue();
+    const node = queue.dequeue();
 
-    yield { current: searchNode, visited, found: searchNode.pos.equals(target) };
+    yield { current: node, visited, found: node.pos.equals(target) };
 
-    for (const neighbourPos of map.getNeighbours(searchNode.pos)) {
-      const hash = neighbourPos.toString();
+    for (const neighbour of map.getNeighbours(node.pos)) {
+      const hash = neighbour.toString();
 
       if (!visited.has(hash)) {
         visited.add(hash);
-        queue.enqueue({
-          pos: neighbourPos,
-          prev: searchNode,
-        });
+        queue.enqueue({ pos: neighbour, prev: node });
       }
     }
   }
