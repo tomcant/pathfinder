@@ -33,7 +33,7 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
   const [visited, setVisited] = useState(getInitialVisited());
   const [solution, setSolution] = useState(getInitialSolution());
 
-  const [method, setMethod] = useState("greedy-best-first-search");
+  const [method, setMethod] = useState("breadth-first-search");
   const [moving, setMoving] = useState(MovingState.None);
   const [isDrawing, setIsDrawing] = useState(false);
   const [, setStopTime] = useState(Date.now);
