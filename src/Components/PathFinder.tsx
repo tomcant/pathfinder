@@ -38,6 +38,8 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
   const [isDrawing, setIsDrawing] = useState(false);
   const [, setStopTime] = useState(Date.now);
 
+  const search = useRef<Generator|null>(null);
+
   const running = useRef(false);
   const isRunning = (): boolean => running.current;
   const setRunning = (r: boolean): void => {
@@ -79,31 +81,42 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
 
   const handleStartClick = async (): Promise<void> => {
     setRunning(true);
-    const solution = getInitialSolution();
-    setSolution(solution);
 
-    // @ts-ignore
-    for (const state of methods[method].start({ map, start, target })) {
-      if (!isRunning()) {
-        break;
-      }
-
-      setVisited(new Set([...state.visited]));
-
-      if (state.found) {
-        // @ts-ignore
-        for (const pos of methods[method].rewind(state.current)) {
-          setSolution(new Set([...solution.add(pos.toString())]));
-          await sleep(10);
-        }
-
-        break;
-      }
-
-      await sleep(5);
+    if (!search.current) {
+      search.current = generateSearch();
+      setSolution(getInitialSolution());
     }
 
+    let next;
+
+    do {
+      next = search.current.next();
+      if (next.value) next.value();
+      if (!isRunning()) return;
+      await sleep(5);
+    } while (!next.done);
+
+    search.current = null;
     setRunning(false);
+  };
+
+  const generateSearch = function* (): Generator<() => void> {
+    // @ts-ignore
+    for (const state of methods[method].start({ map, start, target })) {
+      yield () => setVisited(new Set([...state.visited]));
+
+      if (state.found) {
+        const solution = getInitialSolution();
+        setSolution(solution);
+
+        // @ts-ignore
+        for (const pos of methods[method].rewind(state.current)) {
+          yield () => setSolution(new Set([...solution.add(pos.toString())]));
+        }
+
+        return;
+      }
+    }
   };
 
   const handleStopClick = (): void => {
@@ -117,6 +130,7 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
     setVisited(getInitialVisited());
     setSolution(getInitialSolution());
     setRunning(false);
+    search.current = null;
   };
 
   const handleGenerateClick = (): void => {
