@@ -9,7 +9,6 @@ const dfs = function* (node: SearchNode, visited: Set<string>, params: SearchPar
     if (!visited.has(hash)) {
       visited.add(hash);
       yield* dfs({ pos: neighbour, prev: node }, visited, params);
-      visited.delete(hash);
     }
   }
 };
