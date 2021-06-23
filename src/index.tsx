@@ -8,14 +8,14 @@ const buildPathFinderProps = () => {
   const bodyPadding = parseInt(getComputedStyle(document.body).getPropertyValue("padding-left"));
   // @ts-ignore
   const headerHeight = parseInt(getComputedStyle(document.querySelector("header")).getPropertyValue("height"));
-  const squareWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--map-square-width"));
+  const squareWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--square-width"));
 
   const cols = Math.floor((window.innerWidth - 2 * bodyPadding) / squareWidth);
   const rows = Math.floor((window.innerHeight - 2 * headerHeight - bodyPadding) / squareWidth);
 
   return {
-    mapSize: { cols, rows },
-    mapStyle: {
+    mazeSize: { cols, rows },
+    mazeStyle: {
       gridTemplateColumns: `repeat(${cols}, ${squareWidth}px)`,
       gridTemplateRows: `repeat(${rows}, ${squareWidth}px)`,
     },

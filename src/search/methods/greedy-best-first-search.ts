@@ -1,10 +1,10 @@
 import PriorityQueue from "ts-priority-queue";
 import { SearchMethod, SearchNode, SearchParams, SearchState, rewind } from "../";
-import Vec2d from "../utils/Vec2d";
+import Vec2d from "../../utils/Vec2d";
 
 const manhattanDistance = (a: Vec2d, b: Vec2d): number => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 
-const start = function* ({ map, start, target }: SearchParams): Generator<SearchState> {
+const start = function* ({ maze, start, target }: SearchParams): Generator<SearchState> {
   const visited = new Set<string>([start.toString()]);
 
   const queue = new PriorityQueue<SearchNode>({
@@ -17,7 +17,7 @@ const start = function* ({ map, start, target }: SearchParams): Generator<Search
 
     yield { current: node, visited, found: node.pos.equals(target) };
 
-    for (const neighbour of map.getNeighbours(node.pos)) {
+    for (const neighbour of maze.getNeighbours(node.pos)) {
       const hash = neighbour.toString();
 
       if (!visited.has(hash)) {

@@ -1,25 +1,25 @@
-import Vec2d from "./utils/Vec2d";
+import Vec2d from "../utils/Vec2d";
 
-export default class SearchMap {
+export default class Maze {
   private walls = new Set<string>();
 
   public constructor(readonly numCols: number, readonly numRows: number) {}
 
-  public toggleWall(pos: Vec2d): SearchMap {
+  public toggleWall(pos: Vec2d): Maze {
     if (!this.isWithinBounds(pos)) {
       throw new Error(`Out of bounds: ${pos.toString()}`);
     }
 
-    const map = new SearchMap(this.numCols, this.numRows);
-    map.walls = new Set([...this.walls]);
+    const maze = new Maze(this.numCols, this.numRows);
+    maze.walls = new Set([...this.walls]);
 
-    if (map.isWall(pos)) {
-      map.walls.delete(pos.toString());
+    if (maze.isWall(pos)) {
+      maze.walls.delete(pos.toString());
     } else {
-      map.walls.add(pos.toString());
+      maze.walls.add(pos.toString());
     }
 
-    return map;
+    return maze;
   }
 
   public isWall(pos: Vec2d): boolean {

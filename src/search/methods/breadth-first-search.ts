@@ -1,7 +1,7 @@
 import { SearchMethod, SearchNode, SearchParams, SearchState, rewind } from "../";
-import Queue from "../utils/Queue";
+import Queue from "./utils/Queue";
 
-const start = function* ({ map, start, target }: SearchParams): Generator<SearchState> {
+const start = function* ({ maze, start, target }: SearchParams): Generator<SearchState> {
   const visited = new Set<string>([start.toString()]);
   const queue = new Queue<SearchNode>([{ pos: start }]);
 
@@ -10,7 +10,7 @@ const start = function* ({ map, start, target }: SearchParams): Generator<Search
 
     yield { current: node, visited, found: node.pos.equals(target) };
 
-    for (const neighbour of map.getNeighbours(node.pos)) {
+    for (const neighbour of maze.getNeighbours(node.pos)) {
       const hash = neighbour.toString();
 
       if (!visited.has(hash)) {

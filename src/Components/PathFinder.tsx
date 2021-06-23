@@ -1,17 +1,18 @@
 import React, { useRef, useState } from "react";
-import SearchMap from "../search/SearchMap";
-import methods from "../search/methods";
-import Vec2d from "../search/utils/Vec2d";
+import Maze from "../maze/Maze";
+import generateMaze from "../maze/generators/random";
+import searchMethods from "../search/methods";
+import Vec2d from "../utils/Vec2d";
 import sleep from "./utils/sleep";
 import Controls from "./Controls";
-import PathMap from "./PathMap";
+import MazeComponent from "./Maze";
 
 type PathFinderProps = {
-  mapSize: {
+  mazeSize: {
     cols: number;
     rows: number;
   };
-  mapStyle: React.CSSProperties;
+  mazeStyle: React.CSSProperties;
 };
 
 enum MovingState {
@@ -20,25 +21,25 @@ enum MovingState {
   Target,
 }
 
-const getInitialMap = (cols: number, rows: number) => new SearchMap(cols, rows);
+const getInitialMaze = (cols: number, rows: number) => new Maze(cols, rows);
 const getInitialStart = (cols: number, rows: number) => new Vec2d(Math.floor(cols / 4) - 1, Math.floor(rows / 2) - 1);
 const getInitialTarget = (cols: number, rows: number) => new Vec2d(cols - Math.floor(cols / 4), Math.floor(rows / 2) - 1);
 const getInitialVisited = () => new Set<string>();
 const getInitialSolution = () => new Set<string>();
 
-const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX.Element => {
-  const [map, setMap] = useState(getInitialMap(cols, rows));
+const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): JSX.Element => {
+  const [maze, setMaze] = useState(getInitialMaze(cols, rows));
   const [start, setStart] = useState(getInitialStart(cols, rows));
   const [target, setTarget] = useState(getInitialTarget(cols, rows));
   const [visited, setVisited] = useState(getInitialVisited());
   const [solution, setSolution] = useState(getInitialSolution());
 
-  const [method, setMethod] = useState("breadth-first-search");
+  const [searchMethod, setSearchMethod] = useState("breadth-first-search");
   const [moving, setMoving] = useState(MovingState.None);
   const [isDrawing, setIsDrawing] = useState(false);
   const [, setStopTime] = useState(Date.now);
 
-  const search = useRef<Generator|null>(null);
+  const search = useRef<Generator | null>(null);
 
   const running = useRef(false);
   const isRunning = (): boolean => running.current;
@@ -66,16 +67,16 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
     }
 
     setIsDrawing(true);
-    setMap(map.toggleWall(pos));
+    setMaze(maze.toggleWall(pos));
   };
 
   const handleMouseEnter = (pos: Vec2d): void => {
-    if (moving !== MovingState.None && !map.isWall(pos)) {
+    if (moving !== MovingState.None && !maze.isWall(pos)) {
       return moving === MovingState.Start ? setStart(pos) : setTarget(pos);
     }
 
     if (isDrawing && !pos.equals(start) && !pos.equals(target)) {
-      setMap(map.toggleWall(pos));
+      setMaze(maze.toggleWall(pos));
     }
   };
 
@@ -102,15 +103,16 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
 
   const generateSearch = function* (): Generator<() => void> {
     // @ts-ignore
-    for (const state of methods[method].start({ map, start, target })) {
+    const method = searchMethods[searchMethod];
+
+    for (const state of method.start({ maze, start, target })) {
       yield () => setVisited(new Set([...state.visited]));
 
       if (state.found) {
         const solution = getInitialSolution();
         setSolution(solution);
 
-        // @ts-ignore
-        for (const pos of methods[method].rewind(state.current)) {
+        for (const pos of method.rewind(state.current)) {
           yield () => setSolution(new Set([...solution.add(pos.toString())]));
         }
 
@@ -124,7 +126,7 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
   };
 
   const handleClearClick = (): void => {
-    setMap(getInitialMap(cols, rows));
+    setMaze(getInitialMaze(cols, rows));
     setStart(getInitialStart(cols, rows));
     setTarget(getInitialTarget(cols, rows));
     setVisited(getInitialVisited());
@@ -136,36 +138,19 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
   const handleGenerateClick = (): void => {
     handleClearClick();
 
-    const start = Vec2d.random(0, 0, cols / 3, rows / 3);
-    const target = Vec2d.random((cols * 2) / 3, (rows * 2) / 3, cols, rows);
+    const { maze, start, target } = generateMaze(cols, rows);
 
+    setMaze(maze);
     setStart(start);
     setTarget(target);
-
-    let map = getInitialMap(cols, rows);
-
-    for (let row = 0; row < rows; ++row) {
-      for (let col = 0; col < cols; ++col) {
-        const pos = new Vec2d(col, row);
-
-        if (start.equals(pos) || target.equals(pos)) {
-          continue;
-        }
-
-        if (Math.random() < 0.25) {
-          map = map.toggleWall(pos);
-          setMap(map);
-        }
-      }
-    }
   };
 
   const handleMethodSelect = (e: any): void => {
-    setMethod(e.target.value);
+    setSearchMethod(e.target.value);
   };
 
   const getSquareClassName = (pos: Vec2d): string => {
-    if (map.isWall(pos)) {
+    if (maze.isWall(pos)) {
       return "is-wall";
     }
 
@@ -197,12 +182,12 @@ const PathFinder = ({ mapSize: { cols, rows }, mapStyle }: PathFinderProps): JSX
         onClearClick={handleClearClick}
         onGenerateClick={handleGenerateClick}
         onMethodSelect={handleMethodSelect}
-        selectedMethod={method}
+        selectedSearchMethod={searchMethod}
       />
-      <PathMap
+      <MazeComponent
         numRows={rows}
         numCols={cols}
-        style={mapStyle}
+        style={mazeStyle}
         getSquareClassName={getSquareClassName}
         onMouseUp={handleMouseUp}
         onMouseDown={handleMouseDown}

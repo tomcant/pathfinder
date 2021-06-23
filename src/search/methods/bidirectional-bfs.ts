@@ -1,6 +1,6 @@
 import { SearchMethod, SearchNode, SearchParams, SearchState, rewind as defaultRewind } from "../";
-import Queue from "../utils/Queue";
-import Vec2d from "../utils/Vec2d";
+import Queue from "./utils/Queue";
+import Vec2d from "../../utils/Vec2d";
 
 enum Direction {
   Forward,
@@ -14,7 +14,7 @@ type BiDirSearchNode = {
 
 let nodeHistory: BiDirSearchNode[];
 
-const start = function* ({ map, start, target }: SearchParams): Generator<SearchState> {
+const start = function* ({ maze, start, target }: SearchParams): Generator<SearchState> {
   nodeHistory = [];
 
   const visitedForward = new Set<string>([start.toString()]);
@@ -40,7 +40,7 @@ const start = function* ({ map, start, target }: SearchParams): Generator<Search
 
     yield { current: node, visited: new Set([...visitedForward, ...visitedBackward]), found };
 
-    for (const neighbour of map.getNeighbours(node.pos)) {
+    for (const neighbour of maze.getNeighbours(node.pos)) {
       const hash = neighbour.toString();
       let enqueue = false;
 

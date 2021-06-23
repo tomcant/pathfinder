@@ -1,8 +1,8 @@
-import SearchMap from "./SearchMap";
-import Vec2d from "./utils/Vec2d";
+import Maze from "../maze/Maze";
+import Vec2d from "../utils/Vec2d";
 
 export type SearchParams = {
-  map: SearchMap;
+  maze: Maze;
   start: Vec2d;
   target: Vec2d;
 };

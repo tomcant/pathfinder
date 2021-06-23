@@ -1,9 +1,9 @@
 @import url("https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css");
 
 :root {
-  --map-square-width: 25px;
-  --map-border-color: var(--nc-bg-3);
-  --map-hover-color: var(--nc-bg-2);
+  --square-width: 25px;
+  --square-border-color: var(--nc-bg-3);
+  --square-hover-color: var(--nc-bg-2);
   --start-color: var(--nc-ac-tx);
   --target-color: var(--nc-ac-tx);
   --wall-color: var(--nc-bg-3);
@@ -40,41 +40,41 @@ body {
   }
 }
 
-.PathMap {
+.Maze {
   display: grid;
 }
 
-.PathMap > * {
-  width: var(--map-square-width);
-  height: var(--map-square-width);
-  border: 1px solid var(--map-border-color);
+.Maze > * {
+  width: var(--square-width);
+  height: var(--square-width);
+  border: 1px solid var(--square-border-color);
   cursor: pointer;
 }
 
-.is-running .PathMap > * {
+.is-running .Maze > * {
   cursor: auto;
 }
 
-.PathFinder:not(.is-running) .PathMap > [class=""]:hover,
-.PathFinder:not(.is-running) .PathMap > :not([class]):hover {
-  background-color: var(--map-hover-color);
+.PathFinder:not(.is-running) .Maze > [class=""]:hover,
+.PathFinder:not(.is-running) .Maze > :not([class]):hover {
+  background-color: var(--square-hover-color);
 }
 
-.PathMap > .is-start {
+.Maze > .is-start {
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%230C4047" d="M15.75 9.525l-4.586-4.586a1.5 1.5 0 00-2.121 2.122l4.586 4.585a.5.5 0 010 .708l-4.586 4.585a1.5 1.5 0 002.121 2.122l4.586-4.586a3.505 3.505 0 000-4.95z"/></svg>');
 }
 
 @media (prefers-color-scheme: dark) {
-  .PathMap > .is-start {
+  .Maze > .is-start {
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23eee" d="M15.75 9.525l-4.586-4.586a1.5 1.5 0 00-2.121 2.122l4.586 4.585a.5.5 0 010 .708l-4.586 4.585a1.5 1.5 0 002.121 2.122l4.586-4.586a3.505 3.505 0 000-4.95z"/></svg>');
   }
 }
 
-.PathMap > .is-target {
+.Maze > .is-target {
   position: relative;
 }
 
-.PathMap > .is-target:before {
+.Maze > .is-target:before {
   content: "";
   position: absolute;
   top: 0;
@@ -87,7 +87,7 @@ body {
   box-sizing: border-box;
 }
 
-.is-running .PathMap > .is-target:before {
+.is-running .Maze > .is-target:before {
   animation: target 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
 }
 
@@ -105,7 +105,7 @@ body {
   }
 }
 
-.PathMap > .is-wall {
+.Maze > .is-wall {
   background-color: var(--wall-color);
   animation: wall 0.25s 1;
 }
@@ -120,7 +120,7 @@ body {
   }
 }
 
-.PathMap > .is-visited {
+.Maze > .is-visited {
   background-color: var(--visited-color);
   animation: visited 0.5s 1;
 }
@@ -136,12 +136,12 @@ body {
   }
 }
 
-.PathMap > .is-solution {
+.Maze > .is-solution {
   background-color: var(--solution-color);
   position: relative;
 }
 
-.PathMap > .is-solution:before {
+.Maze > .is-solution:before {
   content: "";
   position: absolute;
   left: 0;

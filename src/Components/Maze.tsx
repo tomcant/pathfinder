@@ -1,7 +1,7 @@
 import React from "react";
-import Vec2d from "../search/utils/Vec2d";
+import Vec2d from "../utils/Vec2d";
 
-type PathMapProps = {
+type MazeProps = {
   numRows: number;
   numCols: number;
   style: React.CSSProperties;
@@ -11,7 +11,7 @@ type PathMapProps = {
   onMouseEnter: (pos: Vec2d) => void;
 };
 
-const PathMap = (props: PathMapProps): JSX.Element => {
+const Maze = (props: MazeProps): JSX.Element => {
   const squares = [];
 
   for (let row = 0; row < props.numRows; ++row) {
@@ -31,10 +31,10 @@ const PathMap = (props: PathMapProps): JSX.Element => {
   }
 
   return (
-    <div className="PathMap" style={props.style}>
+    <div className="Maze" style={props.style}>
       {squares}
     </div>
   );
 };
 
-export default PathMap;
+export default Maze;
