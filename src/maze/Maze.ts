@@ -26,32 +26,7 @@ export default class Maze {
     return this.walls.has(pos.toString());
   }
 
-  public getNeighbours(pos: Vec2d): Vec2d[] {
-    const neighbours = [];
-
-    const dirs = [
-      { dx: 1, dy: 0 },
-      { dx: 0, dy: 1 },
-      { dx: -1, dy: 0 },
-      { dx: 0, dy: -1 },
-    ];
-
-    for (const { dx, dy } of dirs) {
-      const neighbour = pos.add(new Vec2d(dx, dy));
-
-      if (!this.isWithinBounds(neighbour)) {
-        continue;
-      }
-
-      if (!this.isWall(neighbour)) {
-        neighbours.push(neighbour);
-      }
-    }
-
-    return neighbours;
-  }
-
-  private isWithinBounds(pos: Vec2d): boolean {
+  public isWithinBounds(pos: Vec2d): boolean {
     return pos.x >= 0 && pos.y >= 0 && pos.x < this.numCols && pos.y < this.numRows;
   }
 }
