@@ -1,4 +1,4 @@
-import { SearchMethod, SearchNode, SearchParams, SearchState, rewind } from "../";
+import { SearchNode, SearchParams, SearchState, rewind } from "../";
 import { getNeighbours } from "../../maze";
 import Queue from "./utils/Queue";
 
@@ -22,6 +22,6 @@ const start = function* ({ maze, start, target }: SearchParams): Generator<Searc
   }
 };
 
-const bfs: SearchMethod = { name: "Breadth-first search", start, rewind };
+const bfs = { name: "Breadth-first search", start, rewind };
 
 export default bfs;

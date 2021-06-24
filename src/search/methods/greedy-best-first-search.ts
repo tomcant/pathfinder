@@ -1,5 +1,5 @@
 import PriorityQueue from "ts-priority-queue";
-import { SearchMethod, SearchNode, SearchParams, SearchState, rewind } from "../";
+import { SearchNode, SearchParams, SearchState, rewind } from "../";
 import { getNeighbours } from "../../maze";
 import Vec2d from "../../utils/Vec2d";
 
@@ -29,6 +29,6 @@ const start = function* ({ maze, start, target }: SearchParams): Generator<Searc
   }
 };
 
-const greedyBestFirstSearch: SearchMethod = { name: "Greedy best-first search", start, rewind };
+const greedyBestFirstSearch = { name: "Greedy best-first search", start, rewind };
 
 export default greedyBestFirstSearch;

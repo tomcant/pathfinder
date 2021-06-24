@@ -1,4 +1,4 @@
-import { SearchMethod, SearchNode, SearchParams, SearchState, rewind as defaultRewind } from "../";
+import { SearchNode, SearchParams, SearchState, rewind as defaultRewind } from "../";
 import { getNeighbours } from "../../maze";
 import Queue from "./utils/Queue";
 import Vec2d from "../../utils/Vec2d";
@@ -79,6 +79,6 @@ const rewind = (node: SearchNode): Vec2d[] => {
   return [...defaultRewind(intersection[0].node), ...defaultRewind(intersection[1].node).reverse()];
 };
 
-const biDirBfs: SearchMethod = { name: "Bidirectional BFS", start, rewind };
+const biDirBfs = { name: "Bidirectional BFS", start, rewind };
 
 export default biDirBfs;

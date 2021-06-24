@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
+import { findEmptySquareInBounds } from "../maze";
 import Maze from "../maze/Maze";
-import generateMaze from "../maze/generators/random";
+import mazeGenerators from "../maze/generators";
 import searchMethods from "../search/methods";
 import Vec2d from "../utils/Vec2d";
 import sleep from "./utils/sleep";
@@ -34,7 +35,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   const [visited, setVisited] = useState(getInitialVisited());
   const [solution, setSolution] = useState(getInitialSolution());
 
-  const [searchMethod, setSearchMethod] = useState("breadth-first-search");
+  const [searchMethod, setSearchMethod] = useState("breadthFirstSearch");
   const [moving, setMoving] = useState(MovingState.None);
   const [isDrawing, setIsDrawing] = useState(false);
   const [, setStopTime] = useState(Date.now);
@@ -102,7 +103,6 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   };
 
   const generateSearch = function* (): Generator<() => void> {
-    // @ts-ignore
     const method = searchMethods[searchMethod];
 
     for (const state of method.start({ maze, start, target })) {
@@ -138,14 +138,16 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   const handleGenerateClick = (): void => {
     handleClearClick();
 
-    const { maze, start, target } = generateMaze(cols, rows);
+    const maze = mazeGenerators["random"].generate(cols, rows);
+    const start = findEmptySquareInBounds(maze, Vec2d.origin(), new Vec2d(cols / 3, rows));
+    const target = findEmptySquareInBounds(maze, new Vec2d((cols * 2) / 3, 0), new Vec2d(cols, rows));
 
     setMaze(maze);
     setStart(start);
     setTarget(target);
   };
 
-  const handleMethodSelect = (e: any): void => {
+  const handleSearchMethodSelect = (e: any): void => {
     setSearchMethod(e.target.value);
   };
 
@@ -181,7 +183,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
         onStopClick={handleStopClick}
         onClearClick={handleClearClick}
         onGenerateClick={handleGenerateClick}
-        onMethodSelect={handleMethodSelect}
+        onSearchMethodSelect={handleSearchMethodSelect}
         selectedSearchMethod={searchMethod}
       />
       <MazeComponent

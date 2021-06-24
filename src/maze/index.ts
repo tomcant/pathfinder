@@ -21,3 +21,12 @@ export const getNeighbours = (maze: Maze, pos: Vec2d): Vec2d[] => {
 
   return neighbours;
 };
+
+export const findEmptySquareInBounds = (maze: Maze, from: Vec2d, to: Vec2d): Vec2d => {
+  let square;
+
+  do square = Vec2d.random(from, to);
+  while (maze.isWall(square));
+
+  return square;
+};

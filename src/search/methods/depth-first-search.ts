@@ -1,4 +1,4 @@
-import { SearchMethod, SearchNode, SearchParams, SearchState, rewind } from "../";
+import { SearchNode, SearchParams, SearchState, rewind } from "../";
 import { getNeighbours } from "../../maze";
 
 const dfs = function* (node: SearchNode, visited: Set<string>, params: SearchParams): Generator<SearchState> {
@@ -18,6 +18,6 @@ const start = function* (params: SearchParams): Generator<SearchState> {
   yield* dfs({ pos: params.start }, new Set([params.start.toString()]), params);
 };
 
-const depthFirstSearch: SearchMethod = { name: "Depth-first search", start, rewind };
+const depthFirstSearch = { name: "Depth-first search", start, rewind };
 
 export default depthFirstSearch;

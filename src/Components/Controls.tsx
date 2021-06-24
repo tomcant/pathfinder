@@ -7,7 +7,7 @@ type ControlsProps = {
   onStopClick: () => void;
   onClearClick: () => void;
   onGenerateClick: () => void;
-  onMethodSelect: (e: FormEvent<HTMLSelectElement>) => void;
+  onSearchMethodSelect: (e: FormEvent<HTMLSelectElement>) => void;
   selectedSearchMethod: string;
 };
 
@@ -22,7 +22,7 @@ const Controls = (props: ControlsProps): JSX.Element => (
     <button onClick={props.onGenerateClick} disabled={props.isRunning}>
       Generate
     </button>
-    <select onChange={props.onMethodSelect} value={props.selectedSearchMethod}>
+    <select onChange={props.onSearchMethodSelect} value={props.selectedSearchMethod}>
       {Object.entries(methods).map(([key, method]) => (
         <option key={key} value={key}>
           {method.name}
