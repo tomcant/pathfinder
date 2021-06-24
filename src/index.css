@@ -6,11 +6,26 @@
   --square-hover-color: var(--nc-bg-2);
   --start-color: var(--nc-ac-tx);
   --target-color: var(--nc-ac-tx);
+  --target-border-width: 5px;
   --wall-color: var(--nc-bg-3);
   --visited-color: var(--nc-bg-2);
   --frontier-border-color: var(--nc-ac-tx);
   --solution-color: var(--nc-bg-2);
   --solution-orb-color: var(--nc-ac-tx);
+}
+
+@media screen and (min-width: 900px) {
+  :root {
+    --square-width: 30px;
+    --target-border-width: 6px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  :root {
+    --square-width: 35px;
+    --target-border-width: 7px;
+  }
 }
 
 * {
@@ -83,7 +98,7 @@ body {
   height: 100%;
   transform: scale(0.6);
   border-radius: 100%;
-  border: 5px solid var(--target-color);
+  border: var(--target-border-width) solid var(--target-color);
   box-sizing: border-box;
 }
 

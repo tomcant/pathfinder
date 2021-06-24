@@ -95,7 +95,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
       next = search.current.next();
       if (next.value) next.value();
       if (!isRunning()) return;
-      await sleep(5);
+      await sleep(8);
     } while (!next.done);
 
     search.current = null;
