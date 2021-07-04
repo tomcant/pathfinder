@@ -35,21 +35,20 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   const [visited, setVisited] = useState(getInitialVisited());
   const [solution, setSolution] = useState(getInitialSolution());
 
+  const [moving, setMoving] = useState(MovingState.None);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [, setFinishedAt] = useState(Date.now);
+
   const [mazeGenerator, setMazeGenerator] = useState("binaryTree");
   const [searchMethod, setSearchMethod] = useState("breadthFirstSearch");
 
-  const [moving, setMoving] = useState(MovingState.None);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [, setStopTime] = useState(Date.now);
-
-  const search = useRef<Generator | null>(null);
+  const currentSearch = useRef<Generator | null>(null);
+  const hasCurrentSearch = (): boolean => currentSearch.current !== null;
+  const setCurrentSearch = (s: Generator | null): void => void (currentSearch.current = s);
 
   const running = useRef(false);
   const isRunning = (): boolean => running.current;
-  const setRunning = (r: boolean): void => {
-    running.current = r;
-    if (!r) setStopTime(Date.now);
-  };
+  const setIsRunning = (r: boolean): void => void (running.current = r);
 
   const handleMouseUp = (): void => {
     setMoving(MovingState.None);
@@ -84,24 +83,26 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   };
 
   const handleStartClick = async (): Promise<void> => {
-    setRunning(true);
+    setIsRunning(true);
 
-    if (!search.current) {
-      search.current = generateSearch();
+    if (!hasCurrentSearch()) {
+      setCurrentSearch(generateSearch());
       setSolution(getInitialSolution());
     }
 
     let next;
 
     do {
-      next = search.current.next();
+      // @ts-ignore
+      next = currentSearch.current.next();
       if (next.value) next.value();
       if (!isRunning()) return;
       await sleep(8);
     } while (!next.done);
 
-    search.current = null;
-    setRunning(false);
+    setCurrentSearch(null);
+    setIsRunning(false);
+    setFinishedAt(Date.now);
   };
 
   const generateSearch = function* (): Generator<() => void> {
@@ -123,7 +124,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
     }
   };
 
-  const handleStopClick = (): void => setRunning(false);
+  const handleStopClick = (): void => setIsRunning(false);
 
   const handleClearClick = (): void => {
     setMaze(getInitialMaze(cols, rows));
@@ -131,8 +132,8 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
     setTarget(getInitialTarget(cols, rows));
     setVisited(getInitialVisited());
     setSolution(getInitialSolution());
-    setRunning(false);
-    search.current = null;
+    setCurrentSearch(null);
+    setIsRunning(false);
   };
 
   const handleGenerateClick = (): void => {
