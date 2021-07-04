@@ -11,7 +11,7 @@ const buildPathFinderProps = () => {
   const squareWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--square-width"));
 
   const cols = Math.floor((window.innerWidth - 2 * bodyPadding) / squareWidth);
-  const rows = Math.floor((window.innerHeight - 2 * headerHeight - bodyPadding) / squareWidth);
+  const rows = Math.max(5, Math.floor((window.innerHeight - 3 * headerHeight) / squareWidth));
 
   return {
     mazeSize: { cols, rows },

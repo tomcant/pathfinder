@@ -23,8 +23,8 @@ enum MovingState {
 }
 
 const getInitialMaze = (cols: number, rows: number) => new Maze(cols, rows);
-const getInitialStart = (cols: number, rows: number) => new Vec2d(Math.floor(cols / 4) - 1, Math.floor(rows / 2) - 1);
-const getInitialTarget = (cols: number, rows: number) => new Vec2d(cols - Math.floor(cols / 4), Math.floor(rows / 2) - 1);
+const getInitialStart = (cols: number, rows: number) => new Vec2d(Math.floor(cols / 4) - 1, Math.floor(rows / 2));
+const getInitialTarget = (cols: number, rows: number) => new Vec2d(cols - Math.floor(cols / 4), Math.floor(rows / 2));
 const getInitialVisited = () => new Set<string>();
 const getInitialSolution = () => new Set<string>();
 
@@ -35,7 +35,9 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   const [visited, setVisited] = useState(getInitialVisited());
   const [solution, setSolution] = useState(getInitialSolution());
 
+  const [mazeGenerator, setMazeGenerator] = useState("binaryTree");
   const [searchMethod, setSearchMethod] = useState("breadthFirstSearch");
+
   const [moving, setMoving] = useState(MovingState.None);
   const [isDrawing, setIsDrawing] = useState(false);
   const [, setStopTime] = useState(Date.now);
@@ -121,9 +123,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
     }
   };
 
-  const handleStopClick = (): void => {
-    setRunning(false);
-  };
+  const handleStopClick = (): void => setRunning(false);
 
   const handleClearClick = (): void => {
     setMaze(getInitialMaze(cols, rows));
@@ -138,7 +138,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   const handleGenerateClick = (): void => {
     handleClearClick();
 
-    const maze = mazeGenerators["random"].generate(cols, rows);
+    const maze = mazeGenerators[mazeGenerator].generate(cols, rows);
     const start = findEmptySquareInBounds(maze, Vec2d.origin(), new Vec2d(cols / 3, rows));
     const target = findEmptySquareInBounds(maze, new Vec2d((cols * 2) / 3, 0), new Vec2d(cols, rows));
 
@@ -147,9 +147,8 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
     setTarget(target);
   };
 
-  const handleSearchMethodSelect = (e: any): void => {
-    setSearchMethod(e.target.value);
-  };
+  const handleMazeGeneratorSelect = (e: any): void => setMazeGenerator(e.target.value);
+  const handleSearchMethodSelect = (e: any): void => setSearchMethod(e.target.value);
 
   const getSquareClassName = (pos: Vec2d): string => {
     if (maze.isWall(pos)) {
@@ -183,8 +182,10 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
         onStopClick={handleStopClick}
         onClearClick={handleClearClick}
         onGenerateClick={handleGenerateClick}
-        onSearchMethodSelect={handleSearchMethodSelect}
+        selectedMazeGenerator={mazeGenerator}
         selectedSearchMethod={searchMethod}
+        onMazeGeneratorSelect={handleMazeGeneratorSelect}
+        onSearchMethodSelect={handleSearchMethodSelect}
       />
       <MazeComponent
         numRows={rows}

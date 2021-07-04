@@ -1,5 +1,6 @@
 import { FormEvent } from "react";
-import methods from "../search/methods";
+import mazeGenerators from "../maze/generators";
+import searchMethods from "../search/methods";
 
 type ControlsProps = {
   isRunning: boolean;
@@ -7,28 +8,43 @@ type ControlsProps = {
   onStopClick: () => void;
   onClearClick: () => void;
   onGenerateClick: () => void;
-  onSearchMethodSelect: (e: FormEvent<HTMLSelectElement>) => void;
+  selectedMazeGenerator: string;
   selectedSearchMethod: string;
+  onMazeGeneratorSelect: (e: FormEvent<HTMLSelectElement>) => void;
+  onSearchMethodSelect: (e: FormEvent<HTMLSelectElement>) => void;
 };
 
 const Controls = (props: ControlsProps): JSX.Element => (
   <div className="Controls">
-    <button onClick={props.isRunning ? props.onStopClick : props.onStartClick}>
-      {props.isRunning ? "Stop" : "Start"}
-    </button>
-    <button onClick={props.onClearClick} disabled={props.isRunning}>
-      Clear
-    </button>
-    <button onClick={props.onGenerateClick} disabled={props.isRunning}>
-      Generate
-    </button>
-    <select onChange={props.onSearchMethodSelect} value={props.selectedSearchMethod}>
-      {Object.entries(methods).map(([key, method]) => (
-        <option key={key} value={key}>
-          {method.name}
-        </option>
-      ))}
-    </select>
+    <fieldset>
+      <legend>Maze generator</legend>
+      <select onChange={props.onMazeGeneratorSelect} value={props.selectedMazeGenerator}>
+        {Object.entries(mazeGenerators).map(([key, generator]) => (
+          <option key={key} value={key}>
+            {generator.name}
+          </option>
+        ))}
+      </select>
+      <button onClick={props.onGenerateClick} disabled={props.isRunning}>
+        Generate
+      </button>
+      <button onClick={props.onClearClick} disabled={props.isRunning}>
+        Clear
+      </button>
+    </fieldset>
+    <fieldset>
+      <legend>Search method</legend>
+      <select onChange={props.onSearchMethodSelect} value={props.selectedSearchMethod}>
+        {Object.entries(searchMethods).map(([key, method]) => (
+          <option key={key} value={key}>
+            {method.name}
+          </option>
+        ))}
+      </select>
+      <button onClick={props.isRunning ? props.onStopClick : props.onStartClick}>
+        {props.isRunning ? "Stop" : "Start"}
+      </button>
+    </fieldset>
   </div>
 );
 

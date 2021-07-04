@@ -6,17 +6,23 @@ export default class Maze {
   public constructor(readonly numCols: number, readonly numRows: number) {}
 
   public toggleWall(pos: Vec2d): Maze {
-    if (!this.isWithinBounds(pos)) {
-      throw new Error(`Out of bounds: ${pos.toString()}`);
-    }
+    return this.toggleWalls([pos]);
+  }
 
+  public toggleWalls(positions: Vec2d[]): Maze {
     const maze = new Maze(this.numCols, this.numRows);
     maze.walls = new Set([...this.walls]);
 
-    if (maze.isWall(pos)) {
-      maze.walls.delete(pos.toString());
-    } else {
-      maze.walls.add(pos.toString());
+    for (const pos of positions) {
+      if (!this.isWithinBounds(pos)) {
+        throw new Error(`Out of bounds: ${pos.toString()}`);
+      }
+
+      if (maze.isWall(pos)) {
+        maze.walls.delete(pos.toString());
+      } else {
+        maze.walls.add(pos.toString());
+      }
     }
 
     return maze;
