@@ -3,14 +3,30 @@ import Vec2d from "../utils/Vec2d";
 export default class Maze {
   private walls = new Set<string>();
 
-  public constructor(readonly numCols: number, readonly numRows: number) {}
+  private constructor(readonly numCols: number, readonly numRows: number) {}
+
+  public static empty(numCols: number, numRows: number): Maze {
+    return new Maze(numCols, numRows);
+  }
+
+  public static full(numCols: number, numRows: number): Maze {
+    const walls = [];
+
+    for (let row = 0; row < numRows; ++row) {
+      for (let col = 0; col < numCols; ++col) {
+        walls.push(new Vec2d(col, row));
+      }
+    }
+
+    return Maze.empty(numCols, numRows).toggleWalls(walls);
+  }
 
   public toggleWall(pos: Vec2d): Maze {
     return this.toggleWalls([pos]);
   }
 
   public toggleWalls(positions: Vec2d[]): Maze {
-    const maze = new Maze(this.numCols, this.numRows);
+    const maze = Maze.empty(this.numCols, this.numRows);
     maze.walls = new Set([...this.walls]);
 
     for (const pos of positions) {

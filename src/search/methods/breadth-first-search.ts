@@ -1,5 +1,5 @@
 import { SearchNode, SearchParams, SearchState, rewind } from "../";
-import { getNeighbours } from "../../maze";
+import { getAdjacentPathPositions } from "../../maze";
 import Queue from "./utils/Queue";
 
 const start = function* ({ maze, start, target }: SearchParams): Generator<SearchState> {
@@ -11,7 +11,7 @@ const start = function* ({ maze, start, target }: SearchParams): Generator<Searc
 
     yield { current: node, visited, found: node.pos.equals(target) };
 
-    for (const neighbour of getNeighbours(maze, node.pos)) {
+    for (const neighbour of getAdjacentPathPositions(maze, node.pos)) {
       const hash = neighbour.toString();
 
       if (!visited.has(hash)) {

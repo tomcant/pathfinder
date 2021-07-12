@@ -1,10 +1,10 @@
 import { SearchNode, SearchParams, SearchState, rewind } from "../";
-import { getNeighbours } from "../../maze";
+import { getAdjacentPathPositions } from "../../maze";
 
 const dfs = function* (node: SearchNode, visited: Set<string>, params: SearchParams): Generator<SearchState> {
   yield { current: node, visited, found: node.pos.equals(params.target) };
 
-  for (const neighbour of getNeighbours(params.maze, node.pos)) {
+  for (const neighbour of getAdjacentPathPositions(params.maze, node.pos)) {
     const hash = neighbour.toString();
 
     if (!visited.has(hash)) {

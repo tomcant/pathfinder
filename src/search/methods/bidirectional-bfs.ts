@@ -1,5 +1,5 @@
 import { SearchNode, SearchParams, SearchState, rewind as defaultRewind } from "../";
-import { getNeighbours } from "../../maze";
+import { getAdjacentPathPositions } from "../../maze";
 import Queue from "./utils/Queue";
 import Vec2d from "../../utils/Vec2d";
 
@@ -41,7 +41,7 @@ const start = function* ({ maze, start, target }: SearchParams): Generator<Searc
 
     yield { current: node, visited: new Set([...visitedForward, ...visitedBackward]), found };
 
-    for (const neighbour of getNeighbours(maze, node.pos)) {
+    for (const neighbour of getAdjacentPathPositions(maze, node.pos)) {
       const hash = neighbour.toString();
       let enqueue = false;
 

@@ -22,7 +22,7 @@ enum MovingState {
   Target,
 }
 
-const getInitialMaze = (cols: number, rows: number) => new Maze(cols, rows);
+const getInitialMaze = (cols: number, rows: number) => Maze.empty(cols, rows);
 const getInitialStart = (cols: number, rows: number) => new Vec2d(Math.floor(cols / 4) - 1, Math.floor(rows / 2));
 const getInitialTarget = (cols: number, rows: number) => new Vec2d(cols - Math.floor(cols / 4), Math.floor(rows / 2));
 const getInitialVisited = () => new Set<string>();
@@ -39,7 +39,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   const [isDrawing, setIsDrawing] = useState(false);
   const [, setFinishedAt] = useState(Date.now);
 
-  const [mazeGenerator, setMazeGenerator] = useState("binaryTree");
+  const [mazeGenerator, setMazeGenerator] = useState("prims");
   const [searchMethod, setSearchMethod] = useState("breadthFirstSearch");
 
   const currentSearch = useRef<Generator | null>(null);

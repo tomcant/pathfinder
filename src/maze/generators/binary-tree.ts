@@ -2,7 +2,7 @@ import Maze from "../Maze";
 import Vec2d from "../../utils/Vec2d";
 
 const generate = (cols: number, rows: number): Maze => {
-  let maze = new Maze(cols, rows);
+  let maze = Maze.empty(cols, rows);
 
   for (let row = 2; row < rows; row += 2) {
     for (let col = 2; col < cols; col += 2) {
