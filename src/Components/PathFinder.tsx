@@ -136,14 +136,19 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
     setIsRunning(false);
   };
 
-  const handleGenerateClick = (): void => {
+  const handleGenerateClick = async (): Promise<void> => {
     handleClearClick();
+    let finalMaze = maze;
 
-    const maze = mazeGenerators[mazeGenerator].generate(cols, rows);
-    const start = findEmptySquareInBounds(maze, Vec2d.origin(), new Vec2d(cols / 3, rows));
-    const target = findEmptySquareInBounds(maze, new Vec2d((cols * 2) / 3, 0), new Vec2d(cols, rows));
+    for (const maze of mazeGenerators[mazeGenerator].generate(cols, rows)) {
+      setMaze(maze);
+      finalMaze = maze;
+      await sleep(5);
+    }
 
-    setMaze(maze);
+    const start = findEmptySquareInBounds(finalMaze, Vec2d.origin(), new Vec2d(cols / 3, rows));
+    const target = findEmptySquareInBounds(finalMaze, new Vec2d((cols * 2) / 3, 0), new Vec2d(cols, rows));
+
     setStart(start);
     setTarget(target);
   };

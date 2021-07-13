@@ -5,7 +5,7 @@ import random from "./random";
 
 type MazeGenerator = {
   name: string;
-  generate: (cols: number, rows: number) => Maze;
+  generate: (cols: number, rows: number) => Generator<Maze>;
 };
 
 const generators: { [key: string]: MazeGenerator } = { prims, binaryTree, random };
