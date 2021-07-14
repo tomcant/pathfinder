@@ -138,6 +138,11 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
 
   const handleGenerateClick = async (): Promise<void> => {
     handleClearClick();
+
+    const outOfBounds = new Vec2d(cols, rows);
+    setStart(outOfBounds);
+    setTarget(outOfBounds);
+
     let finalMaze = maze;
 
     for (const maze of mazeGenerators[mazeGenerator].generate(cols, rows)) {
