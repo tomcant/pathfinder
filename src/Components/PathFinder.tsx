@@ -35,9 +35,10 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   const [visited, setVisited] = useState(getInitialVisited());
   const [solution, setSolution] = useState(getInitialSolution());
 
+  const [, setFinishedAt] = useState(Date.now);
   const [moving, setMoving] = useState(MovingState.None);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [, setFinishedAt] = useState(Date.now);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const [mazeGenerator, setMazeGenerator] = useState("prims");
   const [searchMethod, setSearchMethod] = useState("breadthFirstSearch");
@@ -133,11 +134,13 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
     setVisited(getInitialVisited());
     setSolution(getInitialSolution());
     setCurrentSearch(null);
+    setIsGenerating(false);
     setIsRunning(false);
   };
 
   const handleGenerateClick = async (): Promise<void> => {
     handleClearClick();
+    setIsGenerating(true);
 
     const outOfBounds = new Vec2d(cols, rows);
     setStart(outOfBounds);
@@ -151,11 +154,9 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
       await sleep(5);
     }
 
-    const start = findEmptySquareInBounds(finalMaze, Vec2d.origin(), new Vec2d(cols / 3, rows));
-    const target = findEmptySquareInBounds(finalMaze, new Vec2d((cols * 2) / 3, 0), new Vec2d(cols, rows));
-
-    setStart(start);
-    setTarget(target);
+    setStart(findEmptySquareInBounds(finalMaze, Vec2d.origin(), new Vec2d(cols / 3, rows)));
+    setTarget(findEmptySquareInBounds(finalMaze, new Vec2d((cols * 2) / 3, 0), new Vec2d(cols, rows)));
+    setIsGenerating(false);
   };
 
   const handleMazeGeneratorSelect = (e: any): void => setMazeGenerator(e.target.value);
@@ -186,7 +187,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   };
 
   return (
-    <div className={`PathFinder${isRunning() ? " is-running" : ""}`}>
+    <div className={`PathFinder${isRunning() ? " is-running" : ""}${isGenerating ? " is-generating" : ""}`}>
       <Controls
         isRunning={isRunning()}
         onStartClick={handleStartClick}
