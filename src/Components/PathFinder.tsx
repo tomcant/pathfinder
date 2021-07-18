@@ -188,6 +188,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   return (
     <div className={`PathFinder${isSearching() ? " is-searching" : ""}${isGenerating ? " is-generating" : ""}`}>
       <Controls
+        isGenerating={isGenerating}
         isSearching={isSearching()}
         onStartClick={handleStartClick}
         onStopClick={handleStopClick}
