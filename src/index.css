@@ -77,12 +77,12 @@ body {
   cursor: pointer;
 }
 
-.is-running .Maze > * {
+.is-searching .Maze > * {
   cursor: auto;
 }
 
-.PathFinder:not(.is-running) .Maze > [class=""]:hover,
-.PathFinder:not(.is-running) .Maze > :not([class]):hover {
+.PathFinder:not(.is-searching) .Maze > [class=""]:hover,
+.PathFinder:not(.is-searching) .Maze > :not([class]):hover {
   background-color: var(--square-hover-color);
 }
 
@@ -113,7 +113,7 @@ body {
   box-sizing: border-box;
 }
 
-.is-running .Maze > .is-target:before {
+.is-searching .Maze > .is-target:before {
   animation: target 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
 }
 

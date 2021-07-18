@@ -47,9 +47,9 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   const hasCurrentSearch = (): boolean => currentSearch.current !== null;
   const setCurrentSearch = (s: Generator | null): void => void (currentSearch.current = s);
 
-  const running = useRef(false);
-  const isRunning = (): boolean => running.current;
-  const setIsRunning = (r: boolean): void => void (running.current = r);
+  const _isSearching = useRef(false);
+  const isSearching = (): boolean => _isSearching.current;
+  const setIsSearching = (r: boolean): void => void (_isSearching.current = r);
 
   const handleMouseUp = (): void => {
     setMoving(MovingState.None);
@@ -57,7 +57,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   };
 
   const handleMouseDown = (pos: Vec2d): void => {
-    if (isRunning()) {
+    if (isSearching()) {
       return;
     }
 
@@ -84,7 +84,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   };
 
   const handleStartClick = async (): Promise<void> => {
-    setIsRunning(true);
+    setIsSearching(true);
 
     if (!hasCurrentSearch()) {
       setCurrentSearch(generateSearch());
@@ -97,12 +97,12 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
       // @ts-ignore
       next = currentSearch.current.next();
       if (next.value) next.value();
-      if (!isRunning()) return;
+      if (!isSearching()) return;
       await sleep(8);
     } while (!next.done);
 
     setCurrentSearch(null);
-    setIsRunning(false);
+    setIsSearching(false);
     setFinishedAt(Date.now);
   };
 
@@ -125,7 +125,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
     }
   };
 
-  const handleStopClick = (): void => setIsRunning(false);
+  const handleStopClick = (): void => setIsSearching(false);
 
   const handleClearClick = (): void => {
     setMaze(getInitialMaze(cols, rows));
@@ -135,7 +135,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
     setSolution(getInitialSolution());
     setCurrentSearch(null);
     setIsGenerating(false);
-    setIsRunning(false);
+    setIsSearching(false);
   };
 
   const handleGenerateClick = async (): Promise<void> => {
@@ -149,9 +149,8 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
     let finalMaze = maze;
 
     for (const maze of mazeGenerators[mazeGenerator].generate(cols, rows)) {
-      setMaze(maze);
-      finalMaze = maze;
-      await sleep(5);
+      setMaze(finalMaze = maze);
+      await sleep(8);
     }
 
     setStart(findEmptySquareInBounds(finalMaze, Vec2d.origin(), new Vec2d(cols / 3, rows)));
@@ -187,9 +186,9 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   };
 
   return (
-    <div className={`PathFinder${isRunning() ? " is-running" : ""}${isGenerating ? " is-generating" : ""}`}>
+    <div className={`PathFinder${isSearching() ? " is-searching" : ""}${isGenerating ? " is-generating" : ""}`}>
       <Controls
-        isRunning={isRunning()}
+        isSearching={isSearching()}
         onStartClick={handleStartClick}
         onStopClick={handleStopClick}
         onClearClick={handleClearClick}

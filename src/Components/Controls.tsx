@@ -3,7 +3,7 @@ import mazeGenerators from "../maze/generators";
 import searchMethods from "../search/methods";
 
 type ControlsProps = {
-  isRunning: boolean;
+  isSearching: boolean;
   onStartClick: () => void;
   onStopClick: () => void;
   onClearClick: () => void;
@@ -25,10 +25,10 @@ const Controls = (props: ControlsProps): JSX.Element => (
           </option>
         ))}
       </select>
-      <button onClick={props.onGenerateClick} disabled={props.isRunning}>
+      <button onClick={props.onGenerateClick} disabled={props.isSearching}>
         Generate
       </button>
-      <button onClick={props.onClearClick} disabled={props.isRunning}>
+      <button onClick={props.onClearClick} disabled={props.isSearching}>
         Clear
       </button>
     </fieldset>
@@ -41,8 +41,8 @@ const Controls = (props: ControlsProps): JSX.Element => (
           </option>
         ))}
       </select>
-      <button onClick={props.isRunning ? props.onStopClick : props.onStartClick}>
-        {props.isRunning ? "Stop" : "Start"}
+      <button onClick={props.isSearching ? props.onStopClick : props.onStartClick}>
+        {props.isSearching ? "Stop" : "Start"}
       </button>
     </fieldset>
   </div>
