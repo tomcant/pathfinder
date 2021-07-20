@@ -12,6 +12,6 @@ const generate = function* (cols: number, rows: number): Generator<Maze> {
   }
 };
 
-const random = { name: "Binary tree", generate };
+const binaryTree = { name: "Binary tree", generate };
 
-export default random;
+export default binaryTree;

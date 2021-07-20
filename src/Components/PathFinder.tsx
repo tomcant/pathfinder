@@ -149,7 +149,8 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
     let finalMaze = maze;
 
     for (const maze of mazeGenerators[mazeGenerator].generate(cols, rows)) {
-      setMaze(finalMaze = maze);
+      setMaze(maze);
+      finalMaze = maze;
       await sleep(8);
     }
 
@@ -186,7 +187,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   };
 
   return (
-    <div className={`PathFinder${isSearching() ? " is-searching" : ""}${isGenerating ? " is-generating" : ""}`}>
+    <div className={`PathFinder${isGenerating ? " is-generating" : isSearching() ? " is-searching" : ""}`}>
       <Controls
         isGenerating={isGenerating}
         isSearching={isSearching()}

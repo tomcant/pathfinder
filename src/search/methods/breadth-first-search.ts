@@ -22,6 +22,6 @@ const start = function* ({ maze, start, target }: SearchParams): Generator<Searc
   }
 };
 
-const bfs = { name: "Breadth-first search", start, rewind };
+const breadthFirstSearch = { name: "Breadth-first search", start, rewind };
 
-export default bfs;
+export default breadthFirstSearch;
