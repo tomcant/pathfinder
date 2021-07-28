@@ -40,7 +40,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   const [isDrawing, setIsDrawing] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const [mazeGenerator, setMazeGenerator] = useState("prims");
+  const [mazeGenerator, setMazeGenerator] = useState("recursiveDivision");
   const [searchMethod, setSearchMethod] = useState("breadthFirstSearch");
 
   const currentSearch = useRef<Generator | null>(null);
@@ -187,7 +187,11 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   };
 
   return (
-    <div className={`PathFinder${isGenerating ? " is-generating is-" + mazeGenerator : isSearching() ? " is-searching" : ""}`}>
+    <div
+      className={`PathFinder${
+        isGenerating ? " is-generating is-" + mazeGenerator : isSearching() ? " is-searching" : ""
+      }`}
+    >
       <Controls
         isGenerating={isGenerating}
         isSearching={isSearching()}

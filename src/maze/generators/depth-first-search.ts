@@ -4,6 +4,12 @@ import { getAdjacentWallPositions } from "../";
 
 let maze: Maze;
 
+const generate = function* (cols: number, rows: number): Generator<Maze> {
+  const start = Vec2d.random(Vec2d.origin(), new Vec2d(cols, rows));
+  maze = Maze.full(cols, rows).toggleWall(start);
+  yield* dfs(start, new Set([start.toString()]));
+};
+
 const dfs = function* (pos: Vec2d, visited: Set<string>): Generator<Maze> {
   for (const neighbour of shuffle(getAdjacentWallPositions(maze, pos, 2))) {
     const hash = neighbour.toString();
@@ -15,19 +21,12 @@ const dfs = function* (pos: Vec2d, visited: Set<string>): Generator<Maze> {
   }
 };
 
-const generate = function* (cols: number, rows: number): Generator<Maze> {
-  const start = Vec2d.random(Vec2d.origin(), new Vec2d(cols, rows));
-  maze = Maze.full(cols, rows).toggleWall(start);
+const shuffle = <T>(arr: T[]): T[] => {
+  let currentIdx = arr.length;
 
-  yield* dfs(start, new Set([start.toString()]));
-};
-
-const shuffle = <T>(arr: T[]) => {
-  let currentIndex = arr.length;
-
-  while (currentIndex > 0) {
-    const randomIndex = Math.floor(Math.random() * currentIndex--);
-    [arr[currentIndex], arr[randomIndex]] = [arr[randomIndex], arr[currentIndex]];
+  while (currentIdx > 0) {
+    const randomIdx = Math.floor(Math.random() * currentIdx--);
+    [arr[currentIdx], arr[randomIdx]] = [arr[randomIdx], arr[currentIdx]];
   }
 
   return arr;
