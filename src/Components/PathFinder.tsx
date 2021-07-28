@@ -109,7 +109,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   const generateSearch = function* (): Generator<() => void> {
     const method = searchMethods[searchMethod];
 
-    for (const state of method.start({ maze, start, target })) {
+    for (const state of method.search({ maze, start, target })) {
       yield () => setVisited(new Set([...state.visited]));
 
       if (state.found) {
@@ -154,8 +154,8 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
       await sleep(8);
     }
 
-    setStart(findEmptySquareInBounds(finalMaze, Vec2d.origin(), new Vec2d(cols / 3, rows)));
-    setTarget(findEmptySquareInBounds(finalMaze, new Vec2d((cols * 2) / 3, 0), new Vec2d(cols, rows)));
+    setStart(findEmptySquareInBounds(finalMaze, Vec2d.origin(), new Vec2d(Math.floor(cols / 3), rows)));
+    setTarget(findEmptySquareInBounds(finalMaze, new Vec2d(Math.floor((cols * 2) / 3), 0), new Vec2d(cols, rows)));
     setIsGenerating(false);
   };
 

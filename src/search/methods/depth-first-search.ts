@@ -1,7 +1,7 @@
 import { SearchNode, SearchParams, SearchState, rewind } from "../";
 import { getAdjacentPathPositions } from "../../maze";
 
-const start = function* (params: SearchParams): Generator<SearchState> {
+const search = function* (params: SearchParams): Generator<SearchState> {
   yield* dfs({ pos: params.start }, new Set([params.start.toString()]), params);
 };
 
@@ -17,6 +17,6 @@ const dfs = function* (node: SearchNode, visited: Set<string>, params: SearchPar
   }
 };
 
-const depthFirstSearch = { name: "Depth-first search", start, rewind };
+const depthFirstSearch = { name: "Depth-first search", search, rewind };
 
 export default depthFirstSearch;

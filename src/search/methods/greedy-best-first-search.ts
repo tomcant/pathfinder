@@ -3,9 +3,7 @@ import { SearchNode, SearchParams, SearchState, rewind } from "../";
 import { getAdjacentPathPositions } from "../../maze";
 import Vec2d from "../../utils/Vec2d";
 
-const manhattanDistance = (a: Vec2d, b: Vec2d): number => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
-
-const start = function* ({ maze, start, target }: SearchParams): Generator<SearchState> {
+const search = function* ({ maze, start, target }: SearchParams): Generator<SearchState> {
   const visited = new Set<string>([start.toString()]);
 
   const queue = new PriorityQueue<SearchNode>({
@@ -29,6 +27,8 @@ const start = function* ({ maze, start, target }: SearchParams): Generator<Searc
   }
 };
 
-const greedyBestFirstSearch = { name: "Greedy best-first search", start, rewind };
+const manhattanDistance = (a: Vec2d, b: Vec2d): number => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+
+const greedyBestFirstSearch = { name: "Greedy best-first search", search, rewind };
 
 export default greedyBestFirstSearch;

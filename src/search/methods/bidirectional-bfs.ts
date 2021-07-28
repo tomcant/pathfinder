@@ -15,7 +15,7 @@ type BiDirSearchNode = {
 
 let nodeHistory: BiDirSearchNode[];
 
-const start = function* ({ maze, start, target }: SearchParams): Generator<SearchState> {
+const search = function* ({ maze, start, target }: SearchParams): Generator<SearchState> {
   nodeHistory = [];
 
   const visitedForward = new Set<string>([start.toString()]);
@@ -79,6 +79,6 @@ const rewind = (node: SearchNode): Vec2d[] => {
   return [...defaultRewind(intersection[0].node), ...defaultRewind(intersection[1].node).reverse()];
 };
 
-const biDirBfs = { name: "Bidirectional BFS", start, rewind };
+const biDirBfs = { name: "Bidirectional BFS", search, rewind };
 
 export default biDirBfs;

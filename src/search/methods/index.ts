@@ -7,7 +7,7 @@ import Vec2d from "../../utils/Vec2d";
 
 type SearchMethod = {
   name: string;
-  start: (params: SearchParams) => Generator<SearchState>;
+  search: (params: SearchParams) => Generator<SearchState>;
   rewind: (node: SearchNode) => Vec2d[];
 };
 
