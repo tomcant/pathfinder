@@ -1,3 +1,5 @@
+import { random } from "./random";
+
 export default class Vec2d {
   constructor(readonly x: number, readonly y: number) {}
 
@@ -18,9 +20,6 @@ export default class Vec2d {
   }
 
   public static random(from: Vec2d, to: Vec2d): Vec2d {
-    return new Vec2d(
-      Math.floor(from.x + Math.random() * (to.x - from.x)),
-      Math.floor(from.y + Math.random() * (to.y - from.y))
-    );
+    return new Vec2d(from.x + random(to.x - from.x), from.y + random(to.y - from.y));
   }
 }

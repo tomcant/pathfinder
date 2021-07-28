@@ -1,5 +1,6 @@
 import Maze from "../Maze";
 import Vec2d from "../../utils/Vec2d";
+import { randomElement } from "../../utils/random";
 import { getAdjacentWallPositions, getAdjacentPathPositions } from "../";
 
 const generate = function* (cols: number, rows: number): Generator<Maze> {
@@ -21,8 +22,6 @@ const generate = function* (cols: number, rows: number): Generator<Maze> {
     frontier.push(...getAdjacentWallPositions(maze, cell, 2));
   }
 };
-
-const randomElement = <T>(elements: T[]): T => elements[Math.floor(Math.random() * elements.length)];
 
 const prims = { name: "Prims", generate };
 

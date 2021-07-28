@@ -1,5 +1,6 @@
 import Maze from "../Maze";
 import Vec2d from "../../utils/Vec2d";
+import { randomEven } from "../../utils/random";
 
 let maze: Maze;
 
@@ -48,8 +49,6 @@ const divide = function* (from: Vec2d, to: Vec2d): Generator<Maze> {
     yield* divide(new Vec2d(from.x, wallTo.y + 1), to);
   }
 };
-
-const randomEven = (max: number): number => Math.floor(Math.random() * Math.ceil(max / 2)) * 2;
 
 const recursiveDivision = { name: "Recursive division", generate };
 
