@@ -27,7 +27,7 @@ const divide = function* (from: Vec2d, to: Vec2d): Generator<Maze> {
   }
 
   const vertical = width > height;
-  const xy = 1 + (vertical ? from.x + randomEven(width - 1) : from.y + randomEven(height - 1));
+  const xy = 1 + (vertical ? from.x + randomEven(width - 2) : from.y + randomEven(height - 2));
   const gap = vertical ? new Vec2d(xy, from.y + randomEven(height)) : new Vec2d(from.x + randomEven(width), xy);
   const wallFrom = vertical ? new Vec2d(xy, from.y) : new Vec2d(from.x, xy);
   const wallTo = vertical ? new Vec2d(xy, to.y + 1) : new Vec2d(to.x + 1, xy);
