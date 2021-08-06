@@ -4,25 +4,24 @@ import { getAdjacentPathPositions } from "../../maze";
 import Vec2d from "../../utils/Vec2d";
 
 const search = function* ({ maze, start, target }: SearchParams): Generator<SearchState> {
-  const visited = new Set<string>([start.toString()]);
-
   const queue = new PriorityQueue<SearchNode>({
     comparator: (a, b) => manhattanDistance(a.pos, target) - manhattanDistance(b.pos, target),
     initialValues: [{ pos: start }],
   });
+  const visited = new Set<string>();
 
   while (queue.length > 0) {
     const node = queue.dequeue();
+    const hash = node.pos.toString();
 
-    yield { current: node, visited, found: node.pos.equals(target) };
+    if (visited.has(hash)) {
+      continue;
+    }
+
+    yield { current: node, visited: visited.add(hash), found: target.equals(node.pos) };
 
     for (const neighbour of getAdjacentPathPositions(maze, node.pos)) {
-      const hash = neighbour.toString();
-
-      if (!visited.has(hash)) {
-        visited.add(hash);
-        queue.queue({ pos: neighbour, prev: node });
-      }
+      queue.queue({ pos: neighbour, prev: node });
     }
   }
 };

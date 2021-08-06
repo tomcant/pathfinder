@@ -18,9 +18,6 @@ let nodeHistory: BiDirSearchNode[];
 const search = function* ({ maze, start, target }: SearchParams): Generator<SearchState> {
   nodeHistory = [];
 
-  const visitedForward = new Set<string>([start.toString()]);
-  const visitedBackward = new Set<string>([target.toString()]);
-
   const queue = new Queue<BiDirSearchNode>([
     {
       node: { pos: start },
@@ -31,42 +28,41 @@ const search = function* ({ maze, start, target }: SearchParams): Generator<Sear
       direction: Direction.Backward,
     },
   ]);
+  const visitedForward = new Set<string>();
+  const visitedBackward = new Set<string>();
 
   while (!queue.isEmpty()) {
     const { node, direction } = queue.dequeue();
+    const hash = node.pos.toString();
+    let found;
 
-    const found =
-      (direction === Direction.Forward && visitedBackward.has(node.pos.toString())) ||
-      (direction === Direction.Backward && visitedForward.has(node.pos.toString()));
+    switch (direction) {
+      case Direction.Forward:
+        if (visitedForward.has(hash)) continue;
+        found = visitedBackward.has(hash);
+        visitedForward.add(hash);
+        break;
+
+      case Direction.Backward:
+        if (visitedBackward.has(hash)) continue;
+        found = visitedForward.has(hash);
+        visitedBackward.add(hash);
+        break;
+    }
 
     yield { current: node, visited: new Set([...visitedForward, ...visitedBackward]), found };
 
     for (const neighbour of getAdjacentPathPositions(maze, node.pos)) {
-      const hash = neighbour.toString();
-      let enqueue = false;
+      const neighbourNode = {
+        node: {
+          pos: neighbour,
+          prev: node,
+        },
+        direction,
+      };
 
-      if (direction === Direction.Forward) {
-        if (!visitedForward.has(hash)) {
-          visitedForward.add(hash);
-          enqueue = true;
-        }
-      } else if (!visitedBackward.has(hash)) {
-        visitedBackward.add(hash);
-        enqueue = true;
-      }
-
-      if (enqueue) {
-        const neighbourNode = {
-          node: {
-            pos: neighbour,
-            prev: node,
-          },
-          direction,
-        };
-
-        nodeHistory.push(neighbourNode);
-        queue.enqueue(neighbourNode);
-      }
+      nodeHistory.push(neighbourNode);
+      queue.enqueue(neighbourNode);
     }
   }
 };

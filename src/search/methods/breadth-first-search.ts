@@ -3,21 +3,21 @@ import { getAdjacentPathPositions } from "../../maze";
 import Queue from "./utils/Queue";
 
 const search = function* ({ maze, start, target }: SearchParams): Generator<SearchState> {
-  const visited = new Set<string>([start.toString()]);
   const queue = new Queue<SearchNode>([{ pos: start }]);
+  const visited = new Set<string>();
 
   while (!queue.isEmpty()) {
     const node = queue.dequeue();
+    const hash = node.pos.toString();
 
-    yield { current: node, visited, found: node.pos.equals(target) };
+    if (visited.has(hash)) {
+      continue;
+    }
+
+    yield { current: node, visited: visited.add(hash), found: target.equals(node.pos) };
 
     for (const neighbour of getAdjacentPathPositions(maze, node.pos)) {
-      const hash = neighbour.toString();
-
-      if (!visited.has(hash)) {
-        visited.add(hash);
-        queue.enqueue({ pos: neighbour, prev: node });
-      }
+      queue.enqueue({ pos: neighbour, prev: node });
     }
   }
 };
