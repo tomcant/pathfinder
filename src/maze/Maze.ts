@@ -22,6 +22,14 @@ export default class Maze {
     return Maze.empty(numCols, numRows).toggleWalls(walls);
   }
 
+  public isEmpty(pos: Vec2d): boolean {
+    return !this.isWall(pos) && !this.isWeight(pos);
+  }
+
+  public isWall(pos: Vec2d): boolean {
+    return this.walls.has(pos.toString());
+  }
+
   public toggleWall(pos: Vec2d): Maze {
     return this.toggleWalls([pos]);
   }
@@ -44,8 +52,12 @@ export default class Maze {
     return maze;
   }
 
-  public isWall(pos: Vec2d): boolean {
-    return this.walls.has(pos.toString());
+  public isWeight(pos: Vec2d): boolean {
+    return this.weights.has(pos.toString());
+  }
+
+  public getWeight(pos: Vec2d): number {
+    return this.weights.get(pos.toString()) || 1;
   }
 
   public setWeight(pos: Vec2d, weight: number): Maze {
@@ -59,14 +71,6 @@ export default class Maze {
     }
 
     return maze;
-  }
-
-  public getWeight(pos: Vec2d): number {
-    return this.weights.get(pos.toString()) || 1;
-  }
-
-  public isWeight(pos: Vec2d): boolean {
-    return this.weights.has(pos.toString());
   }
 
   public isWithinBounds(pos: Vec2d): boolean {

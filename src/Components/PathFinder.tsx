@@ -20,6 +20,7 @@ enum MovingState {
   None,
   Start,
   Target,
+  Weight,
 }
 
 const getInitialMaze = (cols: number, rows: number) => Maze.empty(cols, rows);
@@ -74,7 +75,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   };
 
   const handleMouseEnter = (pos: Vec2d): void => {
-    if (moving !== MovingState.None && !maze.isWall(pos)) {
+    if (moving !== MovingState.None && maze.isEmpty(pos)) {
       return moving === MovingState.Start ? setStart(pos) : setTarget(pos);
     }
 
