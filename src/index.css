@@ -168,8 +168,8 @@ body {
 }
 
 .Maze > .is-solution {
-  background-color: var(--solution-color);
   position: relative;
+  background-color: var(--solution-color);
 }
 
 .Maze > .is-solution:before {
@@ -200,7 +200,6 @@ body {
 
 .Maze > [data-weight] {
   position: relative;
-  background-color: var(--visited-color);
 }
 
 .Maze > [data-weight]::after {

@@ -45,7 +45,7 @@ const Controls = (props: ControlsProps): JSX.Element => (
       </select>
       {props.isWeighted && (
         <em>
-          <small>Double click the grid to add weights!</small>
+          <small>Double click to add weights!</small>
         </em>
       )}
       <button onClick={props.isSearching ? props.onStopClick : props.onStartClick} disabled={props.isGenerating}>

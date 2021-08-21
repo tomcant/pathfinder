@@ -1,4 +1,5 @@
 import { SearchNode, SearchParams, SearchState } from "../";
+import dijkstra from "./dijkstra";
 import breadthFirstSearch from "./breadth-first-search";
 import biDirectionalBfs from "./bidirectional-bfs";
 import greedBestFirstSearch from "./greedy-best-first-search";
@@ -13,6 +14,7 @@ type SearchMethod = {
 };
 
 const methods: { [key: string]: SearchMethod } = {
+  dijkstra,
   breadthFirstSearch,
   biDirectionalBfs,
   greedBestFirstSearch,
