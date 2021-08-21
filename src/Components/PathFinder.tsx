@@ -16,13 +16,21 @@ type PathFinderProps = {
   mazeStyle: React.CSSProperties;
 };
 
-enum MovingState {
+enum DragType {
   None,
   Start,
   Target,
   Weight,
+  Drawing,
 }
 
+type Drag = {
+  type: DragType;
+  dragged: boolean;
+  pos?: Vec2d;
+};
+
+const getInitialDrag = (): Drag => ({ type: DragType.None, dragged: false });
 const getInitialMaze = (cols: number, rows: number) => Maze.empty(cols, rows);
 const getInitialStart = (cols: number, rows: number) => new Vec2d(Math.floor(cols / 4) - 1, Math.floor(rows / 2));
 const getInitialTarget = (cols: number, rows: number) => new Vec2d(cols - Math.floor(cols / 4), Math.floor(rows / 2));
@@ -36,9 +44,11 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   const [visited, setVisited] = useState(getInitialVisited());
   const [solution, setSolution] = useState(getInitialSolution());
 
+  const [drag, setDrag] = useState(getInitialDrag());
+  const beginDrag = (type: DragType, pos: Vec2d): void => setDrag({ type, dragged: false, pos });
+  const setDragPos = (pos: Vec2d): void => setDrag({ ...drag, dragged: true, pos });
+
   const [, setFinishedAt] = useState(Date.now);
-  const [moving, setMoving] = useState(MovingState.None);
-  const [isDrawing, setIsDrawing] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const [mazeGenerator, setMazeGenerator] = useState("recursiveDivision");
@@ -52,36 +62,77 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   const isSearching = (): boolean => _isSearching.current;
   const setIsSearching = (r: boolean): void => void (_isSearching.current = r);
 
-  const handleMouseUp = (): void => {
-    setMoving(MovingState.None);
-    setIsDrawing(false);
+  const handleMouseUp = (pos: Vec2d): void => {
+    if (isSearching()) return;
+
+    if (maze.isWeight(pos) && !drag.dragged) {
+      setMaze(maze.setWeight(pos, maze.getWeight(pos) + 1));
+    }
+
+    setDrag(getInitialDrag());
   };
 
   const handleMouseDown = (pos: Vec2d): void => {
-    if (isSearching()) {
-      return;
-    }
+    if (isSearching()) return;
 
     if (pos.equals(start)) {
-      return setMoving(MovingState.Start);
+      return beginDrag(DragType.Start, pos);
     }
 
     if (pos.equals(target)) {
-      return setMoving(MovingState.Target);
+      return beginDrag(DragType.Target, pos);
     }
 
-    setIsDrawing(true);
+    if (maze.isWeight(pos)) {
+      return beginDrag(DragType.Weight, pos);
+    }
+
+    beginDrag(DragType.Drawing, pos);
     setMaze(maze.toggleWall(pos));
   };
 
   const handleMouseEnter = (pos: Vec2d): void => {
-    if (moving !== MovingState.None && maze.isEmpty(pos)) {
-      return moving === MovingState.Start ? setStart(pos) : setTarget(pos);
+    if (drag.type === DragType.None) return;
+
+    const isStartOrTarget = pos.equals(start) || pos.equals(target);
+    const isEmpty = maze.isEmpty(pos);
+
+    switch (drag.type) {
+      case DragType.Start:
+      case DragType.Target:
+        if (isEmpty && !isStartOrTarget) {
+          drag.type === DragType.Start ? setStart(pos) : setTarget(pos);
+          setDragPos(pos);
+        }
+
+        break;
+
+      case DragType.Weight:
+        if (isEmpty && !isStartOrTarget) {
+          setMaze(
+            maze
+              .setWeight(pos, maze.getWeight(drag.pos as Vec2d))
+              .removeWeight(drag.pos as Vec2d)
+          );
+          setDragPos(pos);
+        }
+
+        break;
+
+      case DragType.Drawing:
+        if (!isStartOrTarget && (isEmpty || maze.isWall(pos))) {
+          setMaze(maze.toggleWall(pos));
+          setDragPos(pos);
+        }
+    }
+  };
+
+  const handleDoubleClick = (pos: Vec2d): void => {
+    if (isSearching() || pos.equals(start) || pos.equals(target)) {
+      return;
     }
 
-    if (isDrawing && !pos.equals(start) && !pos.equals(target)) {
-      setMaze(maze.toggleWall(pos));
-    }
+    setMaze(maze.isWeight(pos) ? maze.removeWeight(pos) : maze.setWeight(pos, 5));
   };
 
   const handleStartClick = async (): Promise<void> => {
@@ -168,11 +219,11 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
       return "is-wall";
     }
 
-    if (start.equals(pos)) {
+    if (pos.equals(start)) {
       return "is-start";
     }
 
-    if (target.equals(pos)) {
+    if (pos.equals(target)) {
       return "is-target";
     }
 
@@ -206,13 +257,13 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
         onSearchMethodSelect={handleSearchMethodSelect}
       />
       <MazeComponent
-        numRows={rows}
-        numCols={cols}
+        maze={maze}
         style={mazeStyle}
         getSquareClassName={getSquareClassName}
         onMouseUp={handleMouseUp}
         onMouseDown={handleMouseDown}
         onMouseEnter={handleMouseEnter}
+        onDoubleClick={handleDoubleClick}
       />
     </div>
   );

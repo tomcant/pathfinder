@@ -62,14 +62,14 @@ export default class Maze {
 
   public setWeight(pos: Vec2d, weight: number): Maze {
     const maze = this.clone();
+    maze.weights.set(pos.toString(), weight);
     maze.walls.delete(pos.toString());
+    return maze;
+  }
 
-    if (weight > 1) {
-      maze.weights.set(pos.toString(), weight);
-    } else {
-      maze.weights.delete(pos.toString());
-    }
-
+  public removeWeight(pos: Vec2d): Maze {
+    const maze = this.clone();
+    maze.weights.delete(pos.toString());
     return maze;
   }
 
@@ -79,10 +79,8 @@ export default class Maze {
 
   private clone(): Maze {
     const maze = Maze.empty(this.numCols, this.numRows);
-
     maze.walls = new Set([...this.walls]);
     maze.weights = new Map([...this.weights]);
-
     return maze;
   }
 }

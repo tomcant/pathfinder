@@ -1,21 +1,22 @@
 import React from "react";
+import Maze from "../maze/Maze";
 import Vec2d from "../utils/Vec2d";
 
 type MazeProps = {
-  numRows: number;
-  numCols: number;
+  maze: Maze;
   style: React.CSSProperties;
   getSquareClassName: (pos: Vec2d) => string;
   onMouseUp: (pos: Vec2d) => void;
   onMouseDown: (pos: Vec2d) => void;
   onMouseEnter: (pos: Vec2d) => void;
+  onDoubleClick: (pos: Vec2d) => void;
 };
 
-const Maze = (props: MazeProps): JSX.Element => {
+const MazeComponent = (props: MazeProps): JSX.Element => {
   const squares = [];
 
-  for (let row = 0; row < props.numRows; ++row) {
-    for (let col = 0; col < props.numCols; ++col) {
+  for (let row = 0; row < props.maze.numRows; ++row) {
+    for (let col = 0; col < props.maze.numCols; ++col) {
       const pos = new Vec2d(col, row);
 
       squares.push(
@@ -25,6 +26,7 @@ const Maze = (props: MazeProps): JSX.Element => {
           onMouseUp={() => props.onMouseUp(pos)}
           onMouseDown={() => props.onMouseDown(pos)}
           onMouseEnter={() => props.onMouseEnter(pos)}
+          onDoubleClick={() => props.onDoubleClick(pos)}
         />
       );
     }
@@ -37,4 +39,4 @@ const Maze = (props: MazeProps): JSX.Element => {
   );
 };
 
-export default Maze;
+export default MazeComponent;
