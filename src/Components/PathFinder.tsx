@@ -108,12 +108,8 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
         break;
 
       case DragType.Weight:
-        if (isEmpty && !isStartOrTarget) {
-          setMaze(
-            maze
-              .setWeight(pos, maze.getWeight(drag.pos as Vec2d))
-              .removeWeight(drag.pos as Vec2d)
-          );
+        if (isEmpty && !isStartOrTarget && drag.pos !== undefined) {
+          setMaze(maze.setWeight(pos, maze.getWeight(drag.pos)).removeWeight(drag.pos));
           setDragPos(pos);
         }
 
@@ -128,7 +124,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   };
 
   const handleDoubleClick = (pos: Vec2d): void => {
-    if (isSearching() || pos.equals(start) || pos.equals(target)) {
+    if (!searchMethods[searchMethod].isWeighted || isSearching() || pos.equals(start) || pos.equals(target)) {
       return;
     }
 
@@ -212,7 +208,14 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
   };
 
   const handleMazeGeneratorSelect = (e: any): void => setMazeGenerator(e.target.value);
-  const handleSearchMethodSelect = (e: any): void => setSearchMethod(e.target.value);
+
+  const handleSearchMethodSelect = (e: any): void => {
+    if (!searchMethods[e.target.value].isWeighted) {
+      setMaze(maze.clearWeights());
+    }
+
+    setSearchMethod(e.target.value);
+  };
 
   const getSquareClassName = (pos: Vec2d): string => {
     if (maze.isWall(pos)) {

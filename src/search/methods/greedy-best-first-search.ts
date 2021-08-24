@@ -28,6 +28,6 @@ const search = function* ({ maze, start, target }: SearchParams): Generator<Sear
 
 const manhattanDistance = (a: Vec2d, b: Vec2d): number => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 
-const greedyBestFirstSearch = { name: "Greedy best-first search", search, rewind };
+const greedyBestFirstSearch = { name: "Greedy best-first search", search, rewind, isWeighted: false };
 
 export default greedyBestFirstSearch;

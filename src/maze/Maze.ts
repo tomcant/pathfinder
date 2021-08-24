@@ -73,6 +73,12 @@ export default class Maze {
     return maze;
   }
 
+  public clearWeights(): Maze {
+    const maze = this.clone();
+    maze.weights = new Map<string, number>();
+    return maze;
+  }
+
   public isWithinBounds(pos: Vec2d): boolean {
     return pos.x >= 0 && pos.y >= 0 && pos.x < this.numCols && pos.y < this.numRows;
   }

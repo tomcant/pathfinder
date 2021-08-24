@@ -22,6 +22,6 @@ const search = function* ({ maze, start, target }: SearchParams): Generator<Sear
   }
 };
 
-const breadthFirstSearch = { name: "Breadth-first search", search, rewind };
+const breadthFirstSearch = { name: "Breadth-first search", search, rewind, isWeighted: false };
 
 export default breadthFirstSearch;

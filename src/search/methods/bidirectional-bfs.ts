@@ -75,6 +75,6 @@ const rewind = (node: SearchNode): Vec2d[] => {
   return [...defaultRewind(intersection[0].node), ...defaultRewind(intersection[1].node).reverse()];
 };
 
-const biDirBfs = { name: "Bidirectional BFS", search, rewind };
+const biDirBfs = { name: "Bidirectional BFS", search, rewind, isWeighted: false };
 
 export default biDirBfs;

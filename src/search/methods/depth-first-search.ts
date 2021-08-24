@@ -19,6 +19,6 @@ const dfs = function* (node: SearchNode, visited: Set<string>, params: SearchPar
   }
 };
 
-const depthFirstSearch = { name: "Depth-first search", search, rewind };
+const depthFirstSearch = { name: "Depth-first search", search, rewind, isWeighted: false };
 
 export default depthFirstSearch;

@@ -9,6 +9,7 @@ type SearchMethod = {
   name: string;
   search: (params: SearchParams) => Generator<SearchState>;
   rewind: (node: SearchNode) => Vec2d[];
+  isWeighted: boolean;
 };
 
 const methods: { [key: string]: SearchMethod } = {
