@@ -5,6 +5,7 @@ import searchMethods from "../search/methods";
 type ControlsProps = {
   isGenerating: boolean;
   isSearching: boolean;
+  isWeighted: boolean;
   onStartClick: () => void;
   onStopClick: () => void;
   onClearClick: () => void;
@@ -42,6 +43,11 @@ const Controls = (props: ControlsProps): JSX.Element => (
           </option>
         ))}
       </select>
+      {props.isWeighted && (
+        <em>
+          <small>Double click the grid to add weights!</small>
+        </em>
+      )}
       <button onClick={props.isSearching ? props.onStopClick : props.onStartClick} disabled={props.isGenerating}>
         {props.isSearching ? "Stop" : "Start"}
       </button>

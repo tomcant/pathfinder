@@ -234,6 +234,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
       <Controls
         isGenerating={isGenerating}
         isSearching={isSearching()}
+        isWeighted={searchMethods[searchMethod].isWeighted}
         onStartClick={handleStartClick}
         onStopClick={handleStopClick}
         onClearClick={handleClearClick}
