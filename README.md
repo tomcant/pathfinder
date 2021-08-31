@@ -1,3 +1,3 @@
 # Path Finder
 
-This project was created to demonstrate various path finding algorithms.
+This project was created to demonstrate various path finding and maze generation algorithms.
