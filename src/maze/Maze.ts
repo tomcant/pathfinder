@@ -56,8 +56,8 @@ export default class Maze {
     return this.weights.has(pos.toString());
   }
 
-  public getWeight(pos: Vec2d): number {
-    return this.weights.get(pos.toString()) || 1;
+  public getWeight(pos: Vec2d): number | undefined {
+    return this.weights.get(pos.toString());
   }
 
   public setWeight(pos: Vec2d, weight: number): Maze {

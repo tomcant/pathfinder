@@ -66,7 +66,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
     if (isSearching()) return;
 
     if (maze.isWeight(pos) && !drag.dragged) {
-      setMaze(maze.setWeight(pos, maze.getWeight(pos) + 1));
+      setMaze(maze.setWeight(pos, (maze.getWeight(pos) as number) + 1));
     }
 
     setDrag(getInitialDrag());
@@ -109,7 +109,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
 
       case DragType.Weight:
         if (isEmpty && !isStartOrTarget && drag.pos !== undefined) {
-          setMaze(maze.setWeight(pos, maze.getWeight(drag.pos)).removeWeight(drag.pos));
+          setMaze(maze.setWeight(pos, maze.getWeight(drag.pos) as number).removeWeight(drag.pos));
           setDragPos(pos);
         }
 

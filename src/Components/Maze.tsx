@@ -23,6 +23,7 @@ const MazeComponent = (props: MazeProps): JSX.Element => {
         <div
           key={pos.toString()}
           className={props.getSquareClassName(pos)}
+          data-weight={props.maze.getWeight(pos)}
           onMouseUp={() => props.onMouseUp(pos)}
           onMouseDown={() => props.onMouseDown(pos)}
           onMouseEnter={() => props.onMouseEnter(pos)}
