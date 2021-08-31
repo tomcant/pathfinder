@@ -5,7 +5,7 @@ import Vec2d from "../utils/Vec2d";
 type MazeProps = {
   maze: Maze;
   style: React.CSSProperties;
-  getSquareClassName: (pos: Vec2d) => string;
+  getSquareClassName: (pos: Vec2d) => string | undefined;
   onMouseUp: (pos: Vec2d) => void;
   onMouseDown: (pos: Vec2d) => void;
   onMouseEnter: (pos: Vec2d) => void;

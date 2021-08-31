@@ -146,7 +146,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
       next = currentSearch.current.next();
       if (next.value) next.value();
       if (!isSearching()) return;
-      await sleep(8);
+      await sleep(10);
     } while (!next.done);
 
     setCurrentSearch(null);
@@ -199,7 +199,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
     for (const maze of mazeGenerators[mazeGenerator].generate(cols, rows)) {
       setMaze(maze);
       finalMaze = maze;
-      await sleep(8);
+      await sleep(10);
     }
 
     setStart(findEmptySquareInBounds(finalMaze, Vec2d.origin(), new Vec2d(Math.floor(cols / 3), rows)));
@@ -217,28 +217,12 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
     setSearchMethod(e.target.value);
   };
 
-  const getSquareClassName = (pos: Vec2d): string => {
-    if (maze.isWall(pos)) {
-      return "is-wall";
-    }
-
-    if (pos.equals(start)) {
-      return "is-start";
-    }
-
-    if (pos.equals(target)) {
-      return "is-target";
-    }
-
-    if (solution.has(pos.toString())) {
-      return "is-solution";
-    }
-
-    if (visited.has(pos.toString())) {
-      return "is-visited";
-    }
-
-    return "";
+  const getSquareClassName = (pos: Vec2d): string | undefined => {
+    if (maze.isWall(pos)) return "is-wall";
+    if (pos.equals(start)) return "is-start";
+    if (pos.equals(target)) return "is-target";
+    if (solution.has(pos.toString())) return "is-solution";
+    if (visited.has(pos.toString())) return "is-visited";
   };
 
   return (
