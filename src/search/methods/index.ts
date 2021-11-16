@@ -3,6 +3,7 @@ import breadthFirstSearch from "./breadth-first-search";
 import biDirectionalBfs from "./bidirectional-bfs";
 import greedBestFirstSearch from "./greedy-best-first-search";
 import dijkstra from "./dijkstra";
+import aStar from "./a-star";
 import depthFirstSearch from "./depth-first-search";
 import Vec2d from "../../utils/Vec2d";
 
@@ -18,6 +19,7 @@ const methods: { [key: string]: SearchMethod } = {
   biDirectionalBfs,
   greedBestFirstSearch,
   dijkstra,
+  aStar,
   depthFirstSearch,
 };
 
