@@ -72,7 +72,10 @@ const rewind = (node: SearchNode): Vec2d[] => {
     .filter(({ node: n }) => node.pos.equals(n.pos))
     .sort(({ direction }) => (direction === Direction.Forward ? -1 : 1));
 
-  return [...defaultRewind(intersection[0].node), ...defaultRewind(intersection[1].node).reverse()];
+  return [
+    ...defaultRewind(intersection[0].node),
+    ...defaultRewind(intersection[intersection.length - 1].node).reverse(),
+  ];
 };
 
 const biDirBfs = { name: "Bidirectional BFS", search, rewind, isWeighted: false };
