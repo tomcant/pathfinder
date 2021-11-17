@@ -30,13 +30,14 @@ const search = function* ({ maze, start, target }: SearchParams): Generator<Sear
         pos: neighbour,
         prev: node,
         distFromStart: node.distFromStart + (maze.getWeight(neighbour) || 1),
-        distToTarget: manhattanDistance(neighbour, target),
+        distToTarget: euclideanDistance(neighbour, target),
       });
     }
   }
 };
 
-const manhattanDistance = (a: Vec2d, b: Vec2d): number => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+const euclideanDistance = (a: Vec2d, b: Vec2d): number =>
+  Math.sqrt(Math.abs(a.x - b.x) ** 2 + Math.abs(a.y - b.y) ** 2);
 
 const aStar = { name: "A*", search, rewind, isWeighted: true };
 
