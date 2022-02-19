@@ -1,5 +1,5 @@
 import Maze from "../Maze";
-import Vec2d from "../../utils/Vec2d";
+import Vec2d, { VecStr } from "../../utils/Vec2d";
 import { shuffle } from "../../utils/random";
 import { getAdjacentWallPositions } from "../";
 
@@ -11,7 +11,7 @@ const generate = function* (cols: number, rows: number): Generator<Maze> {
   yield* dfs(start, new Set([start.toString()]));
 };
 
-const dfs = function* (pos: Vec2d, visited: Set<string>): Generator<Maze> {
+const dfs = function* (pos: Vec2d, visited: Set<VecStr>): Generator<Maze> {
   for (const neighbour of shuffle(getAdjacentWallPositions(maze, pos, 2))) {
     const hash = neighbour.toString();
 

@@ -1,14 +1,14 @@
 import PriorityQueue from "ts-priority-queue";
 import { SearchNode, SearchParams, SearchState, rewind } from "../";
 import { getAdjacentPathPositions } from "../../maze";
-import Vec2d from "../../utils/Vec2d";
+import Vec2d, { VecStr } from "../../utils/Vec2d";
 
 const search = function* ({ maze, start, target }: SearchParams): Generator<SearchState> {
   const queue = new PriorityQueue<SearchNode>({
     comparator: (a, b) => manhattanDistance(a.pos, target) - manhattanDistance(b.pos, target),
     initialValues: [{ pos: start }],
   });
-  const visited = new Set<string>();
+  const visited = new Set<VecStr>();
 
   while (queue.length > 0) {
     const node = queue.dequeue();

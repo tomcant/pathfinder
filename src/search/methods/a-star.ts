@@ -1,7 +1,7 @@
 import PriorityQueue from "ts-priority-queue";
 import { SearchNode, SearchParams, SearchState, rewind } from "../";
 import { getAdjacentPathPositions } from "../../maze";
-import Vec2d from "../../utils/Vec2d";
+import Vec2d, { VecStr } from "../../utils/Vec2d";
 
 type AStarSearchNode = SearchNode & {
   distFromStart: number;
@@ -13,7 +13,7 @@ const search = function* ({ maze, start, target }: SearchParams): Generator<Sear
     comparator: (a, b) => a.distFromStart - b.distFromStart + a.distToTarget - b.distToTarget,
     initialValues: [{ pos: start, distFromStart: 0, distToTarget: 0 }],
   });
-  const visited = new Set<string>();
+  const visited = new Set<VecStr>();
 
   while (queue.length > 0) {
     const node = queue.dequeue();

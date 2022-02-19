@@ -11,7 +11,7 @@ export default class Vec2d {
     return this.x === v.x && this.y === v.y;
   }
 
-  public toString(): string {
+  public toString(): VecStr {
     return `(${this.x}, ${this.y})`;
   }
 
@@ -23,3 +23,5 @@ export default class Vec2d {
     return new Vec2d(from.x + random(to.x - from.x), from.y + random(to.y - from.y));
   }
 }
+
+export type VecStr = string;

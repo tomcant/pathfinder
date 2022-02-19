@@ -1,7 +1,7 @@
 import { SearchNode, SearchParams, SearchState, rewind as defaultRewind } from "../";
 import { getAdjacentPathPositions } from "../../maze";
 import Queue from "./utils/Queue";
-import Vec2d from "../../utils/Vec2d";
+import Vec2d, { VecStr } from "../../utils/Vec2d";
 
 enum Direction {
   Forward,
@@ -28,8 +28,8 @@ const search = function* ({ maze, start, target }: SearchParams): Generator<Sear
       direction: Direction.Backward,
     },
   ]);
-  const visitedForward = new Set<string>();
-  const visitedBackward = new Set<string>();
+  const visitedForward = new Set<VecStr>();
+  const visitedBackward = new Set<VecStr>();
 
   while (!queue.isEmpty()) {
     const { node, direction } = queue.dequeue();

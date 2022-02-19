@@ -3,7 +3,7 @@ import { findEmptySquareInBounds } from "../maze";
 import Maze from "../maze/Maze";
 import mazeGenerators from "../maze/generators";
 import searchMethods from "../search/methods";
-import Vec2d from "../utils/Vec2d";
+import Vec2d, { VecStr } from "../utils/Vec2d";
 import sleep from "./utils/sleep";
 import Controls from "./Controls";
 import MazeComponent from "./Maze";
@@ -34,8 +34,8 @@ const getInitialDrag = (): Drag => ({ type: DragType.None, dragged: false });
 const getInitialMaze = (cols: number, rows: number) => Maze.empty(cols, rows);
 const getInitialStart = (cols: number, rows: number) => new Vec2d(Math.floor(cols / 4) - 1, Math.floor(rows / 2));
 const getInitialTarget = (cols: number, rows: number) => new Vec2d(cols - Math.floor(cols / 4), Math.floor(rows / 2));
-const getInitialVisited = () => new Set<string>();
-const getInitialSolution = () => new Set<string>();
+const getInitialVisited = () => new Set<VecStr>();
+const getInitialSolution = () => new Set<VecStr>();
 
 const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): JSX.Element => {
   const [maze, setMaze] = useState(getInitialMaze(cols, rows));

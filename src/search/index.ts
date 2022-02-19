@@ -1,5 +1,5 @@
 import Maze from "../maze/Maze";
-import Vec2d from "../utils/Vec2d";
+import Vec2d, { VecStr } from "../utils/Vec2d";
 
 export type SearchParams = {
   maze: Maze;
@@ -14,7 +14,7 @@ export type SearchNode = {
 
 export type SearchState = {
   current: SearchNode;
-  visited: Set<string>;
+  visited: Set<VecStr>;
   found: boolean;
 };
 

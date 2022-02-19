@@ -1,8 +1,8 @@
-import Vec2d from "../utils/Vec2d";
+import Vec2d, { VecStr } from "../utils/Vec2d";
 
 export default class Maze {
-  private walls = new Set<string>();
-  private weights = new Map<string, number>();
+  private walls = new Set<VecStr>();
+  private weights = new Map<VecStr, number>();
 
   private constructor(readonly numCols: number, readonly numRows: number) {}
 
@@ -75,7 +75,7 @@ export default class Maze {
 
   public clearWeights(): Maze {
     const maze = this.clone();
-    maze.weights = new Map<string, number>();
+    maze.weights = new Map<VecStr, number>();
     return maze;
   }
 
