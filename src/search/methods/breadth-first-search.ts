@@ -15,7 +15,11 @@ const search = function* ({ maze, start, target }: SearchParams): Generator<Sear
       continue;
     }
 
-    yield { current: node, visited: visited.add(hash), found: target.equals(node.pos) };
+    yield {
+      current: node,
+      visited: visited.add(hash),
+      found: target.equals(node.pos),
+    };
 
     for (const neighbour of getAdjacentPathPositions(maze, node.pos)) {
       queue.enqueue({ pos: neighbour, prev: node });

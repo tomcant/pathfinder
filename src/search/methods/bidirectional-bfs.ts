@@ -50,7 +50,11 @@ const search = function* ({ maze, start, target }: SearchParams): Generator<Sear
         break;
     }
 
-    yield { current: node, visited: new Set([...visitedForward, ...visitedBackward]), found };
+    yield {
+      current: node,
+      visited: new Set([...visitedForward, ...visitedBackward]),
+      found,
+    };
 
     for (const neighbour of getAdjacentPathPositions(maze, node.pos)) {
       const neighbourNode = {

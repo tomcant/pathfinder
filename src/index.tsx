@@ -6,8 +6,10 @@ import "./index.css";
 const isEmbedMode = () => window.location.search.indexOf("embed") !== -1;
 
 if (isEmbedMode()) {
-  const overrideScheme = ":root{--nc-tx-1:#000000;--nc-tx-2:#1A1A1A;--nc-bg-1:#FFFFFF;--nc-bg-2:#F6F8FA;--nc-bg-3:#E5E7EB;--nc-lk-1:#0070F3;--nc-lk-2:#0366D6;--nc-lk-tx:#FFFFFF;--nc-ac-1:#79FFE1;--nc-ac-tx:#0C4047;}";
-  const overrideFeatures = ":root{--square-width: 24px;}body{padding:0;}header{display:none;}fieldset#maze-generator,fieldset#search-method legend,fieldset#search-method select{display:none;}fieldset#search-method{padding:0;border:none;}";
+  const overrideScheme =
+    ":root{--nc-tx-1:#000000;--nc-tx-2:#1A1A1A;--nc-bg-1:#FFFFFF;--nc-bg-2:#F6F8FA;--nc-bg-3:#E5E7EB;--nc-lk-1:#0070F3;--nc-lk-2:#0366D6;--nc-lk-tx:#FFFFFF;--nc-ac-1:#79FFE1;--nc-ac-tx:#0C4047;}";
+  const overrideFeatures =
+    ":root{--square-width: 24px;}body{padding:0;}header{display:none;}fieldset#maze-generator,fieldset#search-method legend,fieldset#search-method select{display:none;}fieldset#search-method{padding:0;border:none;}";
   const embedCss = overrideScheme + overrideFeatures;
   const style = document.createElement("style");
   style.appendChild(document.createTextNode(embedCss));
@@ -25,8 +27,11 @@ const buildPathFinderProps = () => {
   }
 
   if (mazeSize.rows === null) {
-    // @ts-ignore
-    const headerHeight = isEmbedMode() ? 30 : parseInt(getComputedStyle(document.querySelector("header")).getPropertyValue("height"));
+    const headerHeight = isEmbedMode()
+      ? 30
+      : // @ts-ignore
+        parseInt(getComputedStyle(document.querySelector("header")).getPropertyValue("height"));
+
     // @ts-ignore
     mazeSize.rows = Math.max(5, Math.floor((window.innerHeight - 3 * headerHeight) / squareWidth));
   }

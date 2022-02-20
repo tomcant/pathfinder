@@ -13,7 +13,11 @@ const dfs = function* (node: SearchNode, visited: Set<VecStr>, params: SearchPar
     return;
   }
 
-  yield { current: node, visited: visited.add(hash), found: params.target.equals(node.pos) };
+  yield {
+    current: node,
+    visited: visited.add(hash),
+    found: params.target.equals(node.pos),
+  };
 
   for (const neighbour of getAdjacentPathPositions(params.maze, node.pos)) {
     yield* dfs({ pos: neighbour, prev: node }, visited, params);
