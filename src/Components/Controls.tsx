@@ -18,7 +18,7 @@ type ControlsProps = {
 
 const Controls = (props: ControlsProps): JSX.Element => (
   <div className="Controls">
-    <fieldset>
+    <fieldset id="maze-generator">
       <legend>Maze generator</legend>
       <select onChange={props.onMazeGeneratorSelect} value={props.selectedMazeGenerator}>
         {Object.entries(mazeGenerators).map(([key, generator]) => (
@@ -34,7 +34,7 @@ const Controls = (props: ControlsProps): JSX.Element => (
         Clear
       </button>
     </fieldset>
-    <fieldset>
+    <fieldset id="search-method">
       <legend>Search method</legend>
       <select onChange={props.onSearchMethodSelect} value={props.selectedSearchMethod}>
         {Object.entries(searchMethods).map(([key, method]) => (
