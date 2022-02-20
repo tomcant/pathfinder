@@ -4,7 +4,6 @@
   --square-width: 25px;
   --square-border-color: var(--nc-bg-3);
   --square-hover-color: var(--nc-bg-2);
-  --start-color: var(--nc-ac-tx);
   --target-color: var(--nc-ac-tx);
   --target-border-width: 5px;
   --wall-color: var(--nc-bg-3);
@@ -12,6 +11,9 @@
   --frontier-border-color: var(--nc-ac-tx);
   --solution-color: var(--nc-bg-2);
   --solution-orb-color: var(--nc-ac-tx);
+
+  --start-light-bg: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%230C4047" d="M15.75 9.525l-4.586-4.586a1.5 1.5 0 00-2.121 2.122l4.586 4.585a.5.5 0 010 .708l-4.586 4.585a1.5 1.5 0 002.121 2.122l4.586-4.586a3.505 3.505 0 000-4.95z"/></svg>');
+  --start-dark-bg: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23eee" d="M15.75 9.525l-4.586-4.586a1.5 1.5 0 00-2.121 2.122l4.586 4.585a.5.5 0 010 .708l-4.586 4.585a1.5 1.5 0 002.121 2.122l4.586-4.586a3.505 3.505 0 000-4.95z"/></svg>');
 }
 
 @media screen and (min-width: 900px) {
@@ -96,12 +98,12 @@ body {
  * Start node
  */
 .Maze > .is-start {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%230C4047" d="M15.75 9.525l-4.586-4.586a1.5 1.5 0 00-2.121 2.122l4.586 4.585a.5.5 0 010 .708l-4.586 4.585a1.5 1.5 0 002.121 2.122l4.586-4.586a3.505 3.505 0 000-4.95z"/></svg>');
+  background-image: var(--start-light-bg);
 }
 
 @media (prefers-color-scheme: dark) {
   .Maze > .is-start {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23eee" d="M15.75 9.525l-4.586-4.586a1.5 1.5 0 00-2.121 2.122l4.586 4.585a.5.5 0 010 .708l-4.586 4.585a1.5 1.5 0 002.121 2.122l4.586-4.586a3.505 3.505 0 000-4.95z"/></svg>');
+    background-image: var(--start-dark-bg);
   }
 }
 
