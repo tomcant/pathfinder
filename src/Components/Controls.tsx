@@ -49,7 +49,7 @@ const Controls = (props: ControlsProps): JSX.Element => (
         </em>
       )}
       <button onClick={props.isSearching ? props.onStopClick : props.onStartClick} disabled={props.isGenerating}>
-        {props.isSearching ? "Stop" : "Start"}
+        {props.isSearching ? "Stop" : "Search"}
       </button>
     </fieldset>
   </div>
