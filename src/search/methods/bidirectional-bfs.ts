@@ -1,7 +1,8 @@
 import { SearchNode, SearchParams, SearchState, rewind as defaultRewind } from "../";
 import { getAdjacentPathPositions } from "../../maze";
+import Vec2d from "../../utils/Vec2d";
+import Set from "../../utils/CompoundSet";
 import Queue from "./utils/Queue";
-import Vec2d, { VecStr } from "../../utils/Vec2d";
 
 enum Direction {
   Forward,
@@ -28,25 +29,25 @@ const search = function* ({ maze, start, target }: SearchParams): Generator<Sear
       direction: Direction.Backward,
     },
   ]);
-  const visitedForward = new Set<VecStr>();
-  const visitedBackward = new Set<VecStr>();
+  const visitedForward = new Set<Vec2d>();
+  const visitedBackward = new Set<Vec2d>();
 
   while (!queue.isEmpty()) {
     const { node, direction } = queue.dequeue();
-    const hash = node.pos.toString();
+    const pos = node.pos;
     let found;
 
     switch (direction) {
       case Direction.Forward:
-        if (visitedForward.has(hash)) continue;
-        found = visitedBackward.has(hash);
-        visitedForward.add(hash);
+        if (visitedForward.has(pos)) continue;
+        found = visitedBackward.has(pos);
+        visitedForward.add(pos);
         break;
 
       case Direction.Backward:
-        if (visitedBackward.has(hash)) continue;
-        found = visitedForward.has(hash);
-        visitedBackward.add(hash);
+        if (visitedBackward.has(pos)) continue;
+        found = visitedForward.has(pos);
+        visitedBackward.add(pos);
         break;
     }
 
@@ -56,7 +57,7 @@ const search = function* ({ maze, start, target }: SearchParams): Generator<Sear
       found,
     };
 
-    for (const neighbour of getAdjacentPathPositions(maze, node.pos)) {
+    for (const neighbour of getAdjacentPathPositions(maze, pos)) {
       const neighbourNode = {
         node: {
           pos: neighbour,

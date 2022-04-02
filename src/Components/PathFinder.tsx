@@ -3,7 +3,8 @@ import { findEmptySquareInBounds } from "../maze";
 import Maze from "../maze/Maze";
 import mazeGenerators from "../maze/generators";
 import searchMethods from "../search/methods";
-import Vec2d, { VecStr } from "../utils/Vec2d";
+import Vec2d from "../utils/Vec2d";
+import Set from "../utils/CompoundSet";
 import sleep from "./utils/sleep";
 import Controls from "./Controls";
 import MazeComponent from "./Maze";
@@ -34,8 +35,8 @@ const getInitialDrag = (): Drag => ({ type: DragType.None, dragged: false });
 const getInitialMaze = (cols: number, rows: number) => Maze.empty(cols, rows);
 const getInitialStart = (cols: number, rows: number) => new Vec2d(Math.floor(cols / 4) - 1, Math.floor(rows / 2));
 const getInitialTarget = (cols: number, rows: number) => new Vec2d(cols - Math.floor(cols / 4), Math.floor(rows / 2));
-const getInitialVisited = () => new Set<VecStr>();
-const getInitialSolution = () => new Set<VecStr>();
+const getInitialVisited = () => new Set<Vec2d>();
+const getInitialSolution = () => new Set<Vec2d>();
 
 const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): JSX.Element => {
   const [maze, setMaze] = useState(getInitialMaze(cols, rows));
@@ -165,7 +166,7 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
         setSolution(solution);
 
         for (const pos of method.rewind(state.current)) {
-          yield () => setSolution(new Set([...solution.add(pos.toString())]));
+          yield () => setSolution(new Set([...solution.add(pos)]));
         }
 
         return;
@@ -221,8 +222,8 @@ const PathFinder = ({ mazeSize: { cols, rows }, mazeStyle }: PathFinderProps): J
     if (maze.isWall(pos)) return "is-wall";
     if (pos.equals(start)) return "is-start";
     if (pos.equals(target)) return "is-target";
-    if (solution.has(pos.toString())) return "is-solution";
-    if (visited.has(pos.toString())) return "is-visited";
+    if (solution.has(pos)) return "is-solution";
+    if (visited.has(pos)) return "is-visited";
   };
 
   return (

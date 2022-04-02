@@ -1,25 +1,26 @@
 import { SearchNode, SearchParams, SearchState, rewind } from "../";
 import { getAdjacentPathPositions } from "../../maze";
-import { VecStr } from "../../utils/Vec2d";
+import Vec2d from "../../utils/Vec2d";
+import Set from "../../utils/CompoundSet";
 
 const search = function* (params: SearchParams): Generator<SearchState> {
   yield* dfs({ pos: params.start }, new Set(), params);
 };
 
-const dfs = function* (node: SearchNode, visited: Set<VecStr>, params: SearchParams): Generator<SearchState> {
-  const hash = node.pos.toString();
+const dfs = function* (node: SearchNode, visited: Set<Vec2d>, params: SearchParams): Generator<SearchState> {
+  const pos = node.pos;
 
-  if (visited.has(hash)) {
+  if (visited.has(pos)) {
     return;
   }
 
   yield {
     current: node,
-    visited: visited.add(hash),
-    found: params.target.equals(node.pos),
+    visited: visited.add(pos),
+    found: params.target.equals(pos),
   };
 
-  for (const neighbour of getAdjacentPathPositions(params.maze, node.pos)) {
+  for (const neighbour of getAdjacentPathPositions(params.maze, pos)) {
     yield* dfs({ pos: neighbour, prev: node }, visited, params);
   }
 };
