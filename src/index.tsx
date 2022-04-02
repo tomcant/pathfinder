@@ -7,11 +7,11 @@ const isEmbedMode = () => window.location.search.indexOf("embed") !== -1;
 
 if (isEmbedMode()) {
   const colourScheme =
-    ":root{--nc-tx-1:#000000;--nc-tx-2:#1A1A1A;--nc-bg-1:#FFFFFF;--nc-bg-2:#F6F8FA;--nc-bg-3:#E5E7EB;--nc-lk-1:#0070F3;--nc-lk-2:#0366D6;--nc-lk-tx:#FFFFFF;--nc-ac-1:#79FFE1;--nc-ac-tx:#0C4047;}";
+    ":root{--nc-tx-1:#000000;--nc-tx-2:#1A1A1A;--nc-bg-1:#FFFFFF;--nc-bg-2:#F6F8FA;--nc-bg-3:#E5E7EB;--nc-lk-1:#0070F3;--nc-lk-2:#0366D6;--nc-lk-tx:#FFFFFF;--nc-ac-1:#79FFE1;--nc-ac-tx:#0C4047}";
   const hiddenElems =
-    "header,#maze-generator legend,#maze-generator select,#search-method legend,#search-method select{display:none;}";
+    "header,#maze-generator legend,#maze-generator select,#search-method legend,#search-method select{display:none}";
   const tweaks =
-    ":root{--square-width:24px;}body{padding:0;}.Controls{display:flex;}.Controls>fieldset{margin-right:.5rem;margin-bottom:0;}#maze-generator,#search-method{padding:0;border:none;}.Maze>.is-start{background-image:var(--start-light-bg);}";
+    ":root{--square-width:24px}body{padding:0}.Controls{display:flex;margin-bottom:0}.Controls>fieldset,.Controls>fieldset>*{margin-right:1rem}#maze-generator,#search-method{padding:0;border:none}.Maze>.is-start{background-image:var(--start-light-bg)}";
 
   const style = document.createElement("style");
   style.appendChild(document.createTextNode(colourScheme + hiddenElems + tweaks));
