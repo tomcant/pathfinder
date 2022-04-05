@@ -9,7 +9,7 @@ let maze: Maze;
 const generate = function* (cols: number, rows: number): Generator<Maze> {
   const start = Vec2d.random(Vec2d.origin(), new Vec2d(cols, rows));
   maze = Maze.full(cols, rows).toggleWall(start);
-  yield* dfs(start, new Set<Vec2d>([start]));
+  yield* dfs(start, new Set([start]));
 };
 
 const dfs = function* (pos: Vec2d, visited: Set<Vec2d>): Generator<Maze> {

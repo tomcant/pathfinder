@@ -1,9 +1,10 @@
-import Vec2d, { VecStr } from "../utils/Vec2d";
+import Vec2d from "../utils/Vec2d";
 import Set from "../utils/CompoundSet";
+import Map from "../utils/CompoundMap";
 
 export default class Maze {
   private walls = new Set<Vec2d>();
-  private weights = new Map<VecStr, number>();
+  private weights = new Map<Vec2d, number>();
 
   private constructor(readonly numCols: number, readonly numRows: number) {}
 
@@ -54,29 +55,29 @@ export default class Maze {
   }
 
   public isWeight(pos: Vec2d): boolean {
-    return this.weights.has(pos.toString());
+    return this.weights.has(pos);
   }
 
   public getWeight(pos: Vec2d): number | undefined {
-    return this.weights.get(pos.toString());
+    return this.weights.get(pos);
   }
 
   public setWeight(pos: Vec2d, weight: number): Maze {
     const maze = this.clone();
-    maze.weights.set(pos.toString(), weight);
+    maze.weights.set(pos, weight);
     maze.walls.delete(pos);
     return maze;
   }
 
   public removeWeight(pos: Vec2d): Maze {
     const maze = this.clone();
-    maze.weights.delete(pos.toString());
+    maze.weights.delete(pos);
     return maze;
   }
 
   public clearWeights(): Maze {
     const maze = this.clone();
-    maze.weights = new Map<VecStr, number>();
+    maze.weights = new Map<Vec2d, number>();
     return maze;
   }
 
