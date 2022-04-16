@@ -1,5 +1,5 @@
 export default class CompoundMap<K, V> implements Map<K, V> {
-  private readonly items: Map<string, { key: K, value: V }>;
+  private readonly items: Map<string, { key: K; value: V }>;
 
   constructor(entries: [K, V][] = []) {
     this.items = new Map(
@@ -35,7 +35,7 @@ export default class CompoundMap<K, V> implements Map<K, V> {
   }
 
   *entries(): IterableIterator<[K, V]> {
-    yield *this[Symbol.iterator]();
+    yield* this[Symbol.iterator]();
   }
 
   *keys(): IterableIterator<K> {
