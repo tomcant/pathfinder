@@ -1,37 +1,67 @@
-export default class CompoundMap<K, V> {
-  private keys: Map<string, K>;
-  private values: Map<string, V>;
+export default class CompoundMap<K, V> implements Map<K, V> {
+  private readonly items: Map<string, { key: K, value: V }>;
 
-  constructor(initial: [K, V][] = []) {
-    this.keys = new Map(initial.map(([key]) => [this.toKey(key), key]));
-    this.values = new Map(initial.map(([key, value]) => [this.toKey(key), value]));
+  constructor(entries: [K, V][] = []) {
+    this.items = new Map(
+      entries.map(([key, value]) => [this.toKey(key), { key, value }])
+    );
   }
 
-  has(key: K): boolean {
-    return this.keys.has(this.toKey(key));
-  }
-
-  get(key: K): V | undefined {
-    return this.values.get(this.toKey(key));
-  }
-
-  set(key: K, value: V): this {
-    const toKey = this.toKey(key);
-    this.keys.set(toKey, key);
-    this.values.set(toKey, value);
-    return this;
+  clear(): void {
+    this.items.clear();
   }
 
   delete(key: K): boolean {
-    const toKey = this.toKey(key);
-    this.keys.delete(toKey);
-    return this.values.delete(toKey);
+    return this.items.delete(this.toKey(key));
+  }
+
+  get(key: K): V | undefined {
+    return this.items.get(this.toKey(key))?.value;
+  }
+
+  has(key: K): boolean {
+    return this.items.has(this.toKey(key));
+  }
+
+  set(key: K, value: V): this {
+    this.items.set(this.toKey(key), { key, value });
+    return this;
   }
 
   *[Symbol.iterator](): IterableIterator<[K, V]> {
-    for (const [, key] of this.keys.entries()) {
-      yield [key, this.get(key) as V];
+    for (const [, { key, value }] of this.items) {
+      yield [key, value];
     }
+  }
+
+  *entries(): IterableIterator<[K, V]> {
+    yield *this[Symbol.iterator]();
+  }
+
+  *keys(): IterableIterator<K> {
+    for (const [, { key }] of this.items) {
+      yield key;
+    }
+  }
+
+  *values(): IterableIterator<V> {
+    for (const [, { value }] of this.items) {
+      yield value;
+    }
+  }
+
+  forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void {
+    for (const [, { key, value }] of this.items) {
+      callbackfn.call(thisArg, value, key, this);
+    }
+  }
+
+  get size(): number {
+    return this.items.size;
+  }
+
+  get [Symbol.toStringTag](): string {
+    return this.constructor.name;
   }
 
   private toKey(key: K): string {
