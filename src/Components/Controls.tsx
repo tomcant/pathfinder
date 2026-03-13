@@ -43,14 +43,14 @@ const Controls = (props: ControlsProps): JSX.Element => (
           </option>
         ))}
       </select>
+      <button onClick={props.isSearching ? props.onStopClick : props.onStartClick} disabled={props.isGenerating}>
+        {props.isSearching ? "Stop" : "Search"}
+      </button>
       {props.isWeighted && (
         <em>
           <small>Double click to add weights!</small>
         </em>
       )}
-      <button onClick={props.isSearching ? props.onStopClick : props.onStartClick} disabled={props.isGenerating}>
-        {props.isSearching ? "Stop" : "Search"}
-      </button>
     </fieldset>
   </div>
 );

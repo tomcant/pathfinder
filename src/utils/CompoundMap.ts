@@ -2,9 +2,7 @@ export default class CompoundMap<K, V> implements Map<K, V> {
   private readonly items: Map<string, { key: K; value: V }>;
 
   constructor(entries: [K, V][] = []) {
-    this.items = new Map(
-      entries.map(([key, value]) => [this.toKey(key), { key, value }])
-    );
+    this.items = new Map(entries.map(([key, value]) => [this.toKey(key), { key, value }]));
   }
 
   clear(): void {

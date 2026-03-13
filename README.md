@@ -45,6 +45,7 @@ Weighted algorithms respect the cost of each cell. Unweighted algorithms treat e
 ## Getting started
 
 ```sh
+nvm use
 npm install
 npm start
 ```
