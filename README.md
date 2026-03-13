@@ -4,7 +4,7 @@ An interactive visualisation of pathfinding and maze generation algorithms, buil
 
 Watch algorithms explore a grid in real time, generate or draw your own mazes, and compare how different strategies find the shortest path.
 
-![Pathfinder](./pathfinder.gif)
+https://github.com/user-attachments/assets/bf79c881-ead9-4179-90b7-2826a652553c
 
 ## Blog post
 
